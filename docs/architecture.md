@@ -4,6 +4,12 @@ This document defines cycle-level and architectural behavior before CPU
 implementation. Behavior not described here must be resolved here before it is
 encoded in RTL.
 
+The hardware target is the Terasic DE10-Lite. This contract describes the
+intended CPU and board integration. The decoder is implemented; the core remains a scaffold;
+`de10_lite_top` currently implements a standalone board smoke test. The
+[bring-up guide](bringup.md) describes the working Quartus build and the
+remaining CPU integration.
+
 ## Scope
 
 - ISA: RV32I, little-endian, `XLEN=32`, `IALIGN=32`.
@@ -16,12 +22,70 @@ encoded in RTL.
 - Reset PC: `0x0000_0000`.
 - Register `x0` always reads zero and ignores writes.
 
+## Instruction decoder
+
+`rv32i_decoder` is combinational. It exposes raw register fields (`rs1_o`,
+`rs2_o`, `rd_o`), a 32-bit immediate (`imm_o`), encoding legality (`legal_o`),
+and a `decode_control_t` record (`ctrl_o`) defined in `rv32i_pkg`.
+
+| Control field | Meaning |
+| --- | --- |
+| `kind` | ALU, LUI, AUIPC, JAL, JALR, branch, load, store, FENCE, ECALL, EBREAK, or illegal |
+| `alu_op` | One of the ten existing ALU operations |
+| `lhs_sel`, `rhs_sel` | Select `rs1`/PC/zero and `rs2`/immediate for the ALU |
+| `rd_write` | Instruction requests destination writeback; the core must still suppress writes to `x0` and writes on traps |
+| `wb_sel` | Select ALU result, extended memory-load result, or PC + 4 |
+| `branch` | None, EQ, NE, signed LT/GE, or unsigned LT/GE |
+| `mem_size` | Byte, halfword, or word, meaningful only for load/store |
+| `load_unsigned` | Zero-extend byte/halfword loads when set; otherwise sign-extend |
+
+I/S/B/J immediates are sign-extended; U immediates preserve instruction bits
+31:12 and append twelve zeros. Branch and JAL immediates are byte offsets with
+bit zero already inserted. Shift immediates are zero-extended five-bit shift
+amounts, excluding the operation-select bits. Other instructions expose zero
+as their immediate. Raw register fields remain available even where an
+instruction format does not use them; the core interprets them using `kind`.
+
+ALU operands compute results for arithmetic, effective addresses for loads and
+stores, and targets for branches/jumps. Branch conditions compare the original
+source registers separately. JAL/JALR write back PC + 4, not the target. LUI
+uses zero + immediate, and AUIPC uses PC + immediate.
+
+All encodings outside this project's RV32I subset are illegal, including
+unsupported opcode/funct combinations, non-RV32 shift amounts, CSR operations,
+privileged instructions, and FENCE.I. FENCE ignores `fm`, predecessor/successor,
+`rs1`, and `rd` fields and is a no-op in this ordered, single-instruction design.
+Only exact ECALL (`0x00000073`) and EBREAK (`0x00100073`) encodings are legal
+SYSTEM instructions. They decode as legal instructions whose execution traps.
+Supported instructions targeting `x0`, including HINT encodings, remain legal;
+a load to `x0` must still perform its access and report any fault.
+
+Illegal encodings produce `legal_o='0'`, zero immediate, and
+`DECODE_CONTROL_ILLEGAL` (no destination write or memory instruction kind).
+Simulation inputs containing unknown/high-impedance bits receive the same safe
+decode. No decoder output directly asserts a bus request or commits state.
+Target alignment, JALR bit-zero clearing, memory faults, and retirement belong
+to the core's execution states.
+
+Encoding references: [RV32I specification](https://docs.riscv.org/reference/isa/unpriv/rv32.html)
+and [instruction encoding tables](https://docs.riscv.org/reference/isa/unpriv/rv-32-64g.html).
+
 ## Clock and reset
 
-The Basys 3 input clock is 100 MHz on package pin W5. `btnC` is an asynchronous,
-active-high board input. The board wrapper asynchronously asserts internal reset
-and synchronizes its release through two flip-flops. All CPU state uses this
-active-high synchronized reset.
+Use the DE10-Lite's `MAX10_CLK1_50` input at 50 MHz (20 ns period). The initial
+design uses this clock directly for the core, memory bus, RAM, and GPIO, with no
+PLL or derived fabric clock. Board pin and electrical details are in the
+[bring-up guide](bringup.md#board-interface).
+
+Use active-low `KEY(0)` as reset. The board wrapper drives
+`not KEY(0)` into `reset_synchronizer.async_reset_i`; its output remains
+active high internally. Assertion is asynchronous and release passes through
+two flip-flops. Clocked CPU state observes that synchronized reset on active
+edges. The synchronizer starts asserted, which is checked in simulation; verify
+startup behavior on the board as well. Synchronize switch inputs before consuming them.
+
+Changing the clock frequency changes elapsed execution time, not the number of
+cycles in the request/response contract.
 
 ## Core memory interfaces
 
@@ -48,8 +112,9 @@ Timing contract:
    time. It does not issue another request on an interface until it consumes the
    prior response.
 
-The memory bus registers responses from every target, including MMIO, so that
-all devices present identical timing to the core.
+Each target registers its response, and the memory bus registers the target
+selection in parallel. The response mux adds no extra clocked stage, so ROM,
+RAM, MMIO, and unmapped-access faults all follow the same one-cycle timing.
 
 ## Core state machine
 
@@ -83,9 +148,11 @@ State responsibilities:
 | `WRITEBACK` | Atomically commit PC/register effects and pulse retirement. |
 | `HALT` | Hold all architectural state and bus requests inactive. |
 
-An instruction updates architectural state only in `WRITEBACK`. A trapping
-instruction enters `HALT` without register writeback, retirement, or PC update.
-The PC therefore remains the address of the faulting instruction.
+PC and register effects commit in `WRITEBACK`. Stores commit on their accepted
+request edge, as specified by the memory interface, and retire after a
+successful response. A rejected store has no memory or peripheral side effects.
+A trapping instruction enters `HALT` without register writeback, retirement, or
+PC update. The PC therefore remains the address of the faulting instruction.
 
 ## Address map
 
@@ -100,6 +167,31 @@ The PC therefore remains the address of the faulting instruction.
 Unmapped accesses, writes to ROM, instruction fetches outside ROM, and
 unsupported MMIO widths produce access faults. A faulting store does not alter
 the target.
+
+ROM and RAM use FPGA on-chip memory for the initial implementation. External
+SDRAM and user flash are outside this address map and require separate future
+design work. Confirm memory inference and capacity in the Quartus reports.
+
+### DE10-Lite GPIO integration
+
+Preserve the existing 16-bit GPIO ports and LED storage so the board migration
+does not change the peripheral interface or register addresses:
+
+- Connect `SW(9 downto 0)` to `switches_i(9 downto 0)` and tie
+  `switches_i(15 downto 10)` to zero. The existing GPIO synchronizer handles
+  these inputs before software reads them.
+- Connect `leds_o(9 downto 0)` to `LEDR(9 downto 0)`. LED register bits 15:10
+  remain stored and readable but have no physical LEDs attached.
+- LED reads return the stored low 16 bits, zero-extended to 32 bits. Switch
+  reads return the synchronized low ten bits, zero-extended to 32 bits.
+- All GPIO accesses remain aligned word accesses. Drive `d_be="1111"` for
+  word loads as well as stores; byte/halfword load masks must identify their
+  addressed lanes so GPIO can reject unsupported widths.
+- The status register exposes `status_i` and is read-only. The CPU wrapper's
+  status-bit layout is not yet defined; define it here before software uses it.
+- Buttons and seven-segment displays have no MMIO registers in this version.
+  All ten LEDs belong to software during normal CPU operation; the smoke
+  heartbeat is a separate pre-CPU design.
 
 ## Endianness and byte enables
 
@@ -184,8 +276,12 @@ stable for the cycle in which `retire_valid='1'`.
 3. Run small hand-written assembly programs and compare retirement traces.
 4. Run a mixed instruction program.
 5. Run RISC-V Architectural Certification Tests configured for this RV32I DUT.
-6. Run Vivado synthesis, implementation, and timing analysis.
-7. Run LED-visible smoke and CPU programs on the Basys 3.
+6. Run Quartus synthesis, fitting, and timing analysis for the MAX 10 target.
+7. Run LED-visible smoke and CPU programs on the DE10-Lite.
 
 Required directed alignment tests include `JAL`, `JALR`, taken and untaken
 branches, odd-address `LH`/`SH`, and non-word-aligned `LW`/`SW`.
+
+The [simulation guide](../sim/README.md) distinguishes the tests available now
+from planned coverage. The [bring-up guide](bringup.md) defines board acceptance
+criteria and the implemented DE10-Lite wrapper test.

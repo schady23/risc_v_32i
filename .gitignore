@@ -1,20 +1,22 @@
-# Vivado generated files
+# Generated FPGA projects, simulation work libraries, and reports
 /build/
-.Xil/
-*.cache/
-*.gen/
-*.hw/
-*.ip_user_files/
-*.runs/
-*.sim/
-*.xpr
-*.jou
+/db/
+/incremental_db/
+/output_files/
+*.qws
+*.qdf
+*.sof
+*.pof
+*.jic
+*.rpt
+*.summary
+*.smsg
+*.qmsg
+*.jdi
 *.log
-*.str
-*.dcp
-*.bit
-*.ltx
-vivado*.backup.*
+*.qpf.bak
+*.qsf.bak
+work-obj*.cf
 
 # Software build outputs
 software/build/

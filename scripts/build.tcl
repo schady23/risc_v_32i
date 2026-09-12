@@ -1,36 +1,29 @@
-set script_dir [file dirname [file normalize [info script]]]
-set root_dir [file normalize [file join $script_dir ..]]
+# Run with: quartus_sh -t scripts/build.tcl
+package require ::quartus::flow
+source [file join [file dirname [file normalize [info script]]] create_project.tcl]
 
-if {[llength [get_projects -quiet]] == 0} {
-  source [file join $script_dir create_project.tcl]
+# Keep compilation databases and reports under the ignored build directory.
+cd $project_dir
+project_open $project_name
+if {[catch {execute_flow -compile} result]} {
+    project_close
+    error "Quartus compilation failed: $result"
 }
+project_close
 
-launch_runs synth_1 -jobs 4
-wait_on_run synth_1
-if {[get_property PROGRESS [get_runs synth_1]] ne "100%"} {
-  error "Synthesis did not complete successfully"
-}
-
-launch_runs impl_1 -to_step write_bitstream -jobs 4
-wait_on_run impl_1
-if {[get_property PROGRESS [get_runs impl_1]] ne "100%"} {
-  error "Implementation did not complete successfully"
-}
-
-open_run impl_1
 set report_dir [file join $root_dir build reports]
 file mkdir $report_dir
-report_utilization -file [file join $report_dir utilization.rpt]
-report_timing_summary -file [file join $report_dir timing_summary.rpt]
+file copy -force [file join $project_dir output_files $project_name.fit.summary] \
+    [file join $report_dir utilization.rpt]
 
-set worst_path [get_timing_paths -setup -max_paths 1 -nworst 1]
-if {[llength $worst_path] == 0} {
-  error "No setup timing path was available"
+# Quartus compilation alone does not turn every timing violation into an error.
+# Explicitly check timing before declaring the programming file ready.
+set sta [file join $quartus(binpath) quartus_sta]
+if {[catch {exec $sta -t [file join $script_dir check_timing.tcl] >@stdout 2>@stderr} result]} {
+    error "Timing validation failed: $result"
 }
-set worst_slack [get_property SLACK $worst_path]
-if {$worst_slack < 0.0} {
-  error "Timing failed: worst setup slack is $worst_slack ns"
+set sof [file join $project_dir output_files $project_name.sof]
+if {![file exists $sof]} {
+    error "Quartus did not generate the expected programming file: $sof"
 }
-
-puts "Bitstream: [file join [get_property DIRECTORY [get_runs impl_1]] basys3_top.bit]"
-puts "Timing passed with worst setup slack $worst_slack ns"
+puts "Programming file: $sof"

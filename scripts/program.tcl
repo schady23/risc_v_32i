@@ -1,20 +1,19 @@
+# Run with: quartus_sh -t scripts/program.tcl [cable-name]
+# Programs volatile configuration RAM only; does not modify configuration flash.
 set script_dir [file dirname [file normalize [info script]]]
 set root_dir [file normalize [file join $script_dir ..]]
-set bitstream [file join $root_dir build vivado risc_v_32i risc_v_32i.runs impl_1 basys3_top.bit]
+set sof [file join $root_dir build quartus output_files risc_v_32i.sof]
 
-if {![file exists $bitstream]} {
-  error "Bitstream not found: $bitstream"
+if {[llength $quartus(args)] > 1} {
+    error "Usage: quartus_sh -t scripts/program.tcl \"USB-Blaster cable name\""
 }
-
-open_hw_manager
-connect_hw_server
-open_hw_target
-set device [lindex [get_hw_devices xc7a35t_0] 0]
-if {$device eq ""} {
-  error "Basys 3 FPGA xc7a35t_0 was not found"
+set cable "USB-Blaster"
+if {[llength $quartus(args)] == 1} {set cable [lindex $quartus(args) 0]}
+if {![file exists $sof]} {
+    error "Programming file not found: $sof. Run make build first."
 }
-
-current_hw_device $device
-set_property PROGRAM.FILE $bitstream $device
-program_hw_devices $device
-puts "Programmed $device with $bitstream"
+set programmer [file join $quartus(binpath) quartus_pgm]
+if {[catch {exec $programmer -c $cable -m JTAG -o "p;$sof@1" >@stdout 2>@stderr} result]} {
+    error "DE10-Lite configuration failed: $result"
+}
+puts "Configured DE10-Lite with $sof"

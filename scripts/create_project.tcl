@@ -1,44 +1,45 @@
+# Run with: quartus_sh -t scripts/create_project.tcl
+package require ::quartus::project
+
 set script_dir [file dirname [file normalize [info script]]]
 set root_dir [file normalize [file join $script_dir ..]]
-set project_dir [file join $root_dir build vivado]
+set project_dir [file join $root_dir build quartus]
+set project_name risc_v_32i
 
+if {[is_project_open]} {
+    error "Close the current project before generating the DE10-Lite project"
+}
 file mkdir $project_dir
-create_project -force risc_v_32i [file join $project_dir risc_v_32i] -part xc7a35tcpg236-1
-set_property target_language VHDL [current_project]
-set_property default_lib work [current_project]
+# This is a generated project. Tracked sources/constraints are authoritative.
+project_new [file join $project_dir $project_name] -overwrite
+set_global_assignment -name FAMILY "MAX 10"
+set_global_assignment -name DEVICE 10M50DAF484C7G
+set_global_assignment -name TOP_LEVEL_ENTITY de10_lite_top
+set_global_assignment -name VHDL_INPUT_VERSION VHDL_2008
+set_global_assignment -name PROJECT_OUTPUT_DIRECTORY output_files
+set_global_assignment -name NUM_PARALLEL_PROCESSORS 4
+set_global_assignment -name RESERVE_ALL_UNUSED_PINS "AS INPUT TRI-STATED"
+set_global_assignment -name OPTIMIZE_FOR_METASTABILITY ON
 
-set rtl_sources [list \
-  [file join $root_dir rtl pkg rv32i_pkg.vhd] \
-  [file join $root_dir rtl pkg memory_map_pkg.vhd] \
-  [file join $root_dir rtl memory program_image_pkg.vhd] \
-  [file join $root_dir rtl core rv32i_alu.vhd] \
-  [file join $root_dir rtl core rv32i_regfile.vhd] \
-  [file join $root_dir rtl core rv32i_decoder.vhd] \
-  [file join $root_dir rtl core rv32i_core.vhd] \
-  [file join $root_dir rtl memory instruction_rom.vhd] \
-  [file join $root_dir rtl memory data_ram.vhd] \
-  [file join $root_dir rtl peripheral gpio.vhd] \
-  [file join $root_dir rtl interconnect memory_bus.vhd] \
-  [file join $root_dir rtl board reset_synchronizer.vhd] \
-  [file join $root_dir rtl board basys3_top.vhd] \
-]
-
-set simulation_sources [list \
-  [file join $root_dir sim tb_alu.vhd] \
-  [file join $root_dir sim tb_regfile.vhd] \
-  [file join $root_dir sim tb_memory_bus.vhd] \
-  [file join $root_dir sim tb_core.vhd] \
-  [file join $root_dir sim tb_basys3_top.vhd] \
-]
-
-add_files -norecurse $rtl_sources
-set_property file_type {VHDL 2008} [get_files $rtl_sources]
-add_files -fileset sim_1 -norecurse $simulation_sources
-set_property file_type {VHDL 2008} [get_files $simulation_sources]
-add_files -fileset constrs_1 -norecurse [file join $root_dir constraints basys3.xdc]
-
-set_property top basys3_top [get_filesets sources_1]
-set_property top tb_alu [get_filesets sim_1]
-update_compile_order -fileset sources_1
-update_compile_order -fileset sim_1
-puts "Created project at [file join $project_dir risc_v_32i]"
+foreach source {
+    rtl/pkg/rv32i_pkg.vhd
+    rtl/pkg/memory_map_pkg.vhd
+    rtl/memory/program_image_pkg.vhd
+    rtl/core/rv32i_alu.vhd
+    rtl/core/rv32i_regfile.vhd
+    rtl/core/rv32i_decoder.vhd
+    rtl/core/rv32i_core.vhd
+    rtl/memory/instruction_rom.vhd
+    rtl/memory/data_ram.vhd
+    rtl/peripheral/gpio.vhd
+    rtl/interconnect/memory_bus.vhd
+    rtl/board/reset_synchronizer.vhd
+    rtl/board/de10_lite_top.vhd
+} {
+    set_global_assignment -name VHDL_FILE [file join $root_dir $source]
+}
+set_global_assignment -name SDC_FILE [file join $root_dir constraints de10_lite.sdc]
+source [file join $root_dir constraints de10_lite_pins.tcl]
+export_assignments
+project_close
+puts "Created [file join $project_dir $project_name.qpf]"

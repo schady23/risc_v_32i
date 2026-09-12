@@ -12,8 +12,11 @@ end entity;
 architecture rtl of reset_synchronizer is
   signal sync_stages : std_logic_vector(1 downto 0) := (others => '1');
 
-  attribute ASYNC_REG : string;
-  attribute ASYNC_REG of sync_stages : signal is "TRUE";
+  attribute preserve : boolean;
+  attribute preserve of sync_stages : signal is true;
+  attribute altera_attribute : string;
+  attribute altera_attribute of sync_stages : signal is
+    "-name SYNCHRONIZER_IDENTIFICATION ""FORCED IF ASYNCHRONOUS""";
 begin
   process (clk_i, async_reset_i)
   begin

@@ -1,63 +1,115 @@
-# RV32I CPU for the Basys 3
+# RV32I CPU for the DE10-Lite
 
-This repository is a VHDL-2008 scaffold for a multi-cycle RV32I CPU targeting
-the Digilent Basys 3 (`xc7a35tcpg236-1`). The design is intentionally staged:
-the current top level is a board smoke test, while the architectural contracts
-for the CPU, memory system, traps, and retirement trace are fixed in
-[`docs/architecture.md`](docs/architecture.md).
+A VHDL-2008 implementation of a non-pipelined, multi-cycle RV32I CPU targeting
+the Terasic DE10-Lite. The board uses a MAX 10 `10M50DAF484C7G` FPGA; see
+[Terasic's board specifications](https://www.terasic.com.tw/cgi-bin/page/archive.pl?CategoryNo=218&Language=English&No=1021&PartNo=2).
 
-## Current status
+The DE10-Lite board smoke design, pin/timing constraints, Quartus build scripts,
+and board testbench are implemented. The CPU remains under development: its
+decoder is complete, but the execution core is still a scaffold. The FPGA image tests the
+board's clock, reset, switches, and LEDs without executing software.
 
-- Project layout and architecture contract are defined.
-- Basys 3 clock, button, switch, and LED constraints are present.
-- Reset synchronization and a synthesizable board smoke top are implemented.
-- Common RV32I and memory-map packages are present.
-- CPU, decoder, memories, interconnect, GPIO, and testbench files are compileable
-  scaffolds or initial building blocks, not a complete processor.
-- The smoke top mirrors `sw(14 downto 0)` onto `led(14 downto 0)` and blinks
-  `led(15)` from the 100 MHz board clock. Pressing `btnC` clears the LEDs.
+## Documentation
+
+- [Architecture contract](docs/architecture.md): ISA, memory timing, address map,
+  reset, traps, retirement, and the DE10-Lite integration contract.
+- [DE10-Lite bring-up](docs/bringup.md): hardware/tool requirements, build
+  commands, programming instructions, and validation results.
+- [Simulation and testbenches](sim/README.md): runnable GHDL commands, current
+  coverage, and verification milestones.
+- [Architectural tests](sim/arch-test/README.md): future DUT adapter requirements.
+
+## Current implementation
+
+| Component | Status |
+| --- | --- |
+| Shared packages | Types, ALU operations, core states, trap codes, and memory map defined |
+| ALU | All ten RV32I ALU operations implemented; directed coverage is limited |
+| Register file | Two read ports, synchronous write/reset, and protected `x0` implemented |
+| Decoder | All 40 RV32I instructions decoded; legality, immediates, and typed execution controls tested |
+| Core | Inactive shell; no instruction execution or retirement yet |
+| ROM, RAM, memory bus, GPIO | Initial synchronous implementations; broader verification needed |
+| Board support | DE10-Lite smoke RTL, pin/timing constraints, Quartus build and JTAG scripts |
+| Simulation | Five active testbenches, including 270,612 decoder cases; core harness still needed |
 
 ## Repository layout
 
 ```text
-constraints/  Basys 3 pin and timing constraints
-docs/         Architecture and board bring-up documentation
-rtl/          VHDL packages, core, memories, peripherals, and board wrapper
-scripts/      Vivado and program-image generation scripts
-sim/          VHDL testbenches and assembly test programs
-software/     Linker script, startup code, and cross-compilation Makefile
+constraints/  DE10-Lite pin assignments and 50 MHz timing constraints
+docs/         Architecture and DE10-Lite bring-up documentation
+rtl/pkg/      Shared CPU types/constants and memory map
+rtl/core/     ALU, register file, decoder, and core FSM scaffold
+rtl/memory/   Program image, instruction ROM, and data RAM
+rtl/interconnect/  Fixed-latency memory bus
+rtl/peripheral/    Memory-mapped GPIO
+rtl/board/    Reset synchronizer and DE10-Lite smoke wrapper
+scripts/      Quartus build/programming, GHDL runner, and image converter
+sim/          Testbenches, directed assembly programs, and test documentation
+software/     Linker script, startup code, smoke program, and Makefile
 ```
 
-## Vivado smoke build
+## Development workflow
 
-From a Vivado Tcl shell in the repository root:
+From the repository root:
 
-```tcl
-source scripts/create_project.tcl
-source scripts/build.tcl
+```sh
+make test       # Run the five active GHDL testbenches
+make build      # Generate the Quartus project, compile, and check timing
 ```
 
-The generated project is placed under `build/vivado/`; generated files are not
-tracked. See [`docs/bringup.md`](docs/bringup.md) for programming instructions.
+Use Quartus Prime Lite or Standard with MAX 10 support installed; see the
+[Quartus edition comparison](https://www.intel.com/content/www/us/en/products/details/fpga/development-tools/quartus-prime/resource.html).
+The build creates `build/quartus/risc_v_32i.qpf` and
+`build/quartus/output_files/risc_v_32i.sof`. Timing and utilization reports are
+written under `build/reports/`. The smoke design has been compiled with Quartus
+Prime Lite 25.1; see [validation results](docs/bringup.md#validation-results)
+for the evidence and remaining hardware checks.
+
+With a DE10-Lite connected, use the [JTAG instructions](docs/bringup.md#configure-the-board-through-jtag)
+to select the cable and run `make program`. The image mirrors switches 0–8 on
+LEDs 0–8, blinks LED 9, and resets when `KEY(0)` is pressed.
+
+`make project` generates the project without compiling; `make timing` rechecks
+an existing compilation. Project settings are generated from tracked scripts,
+so edit those scripts rather than the generated QSF. All testbenches live in
+[`sim/`](sim/README.md).
 
 ## Software image
 
-The software scaffold expects a GNU RISC-V ELF toolchain:
+From the repository root, with GNU Make, Python 3, and a bare-metal GNU RISC-V
+toolchain installed:
 
 ```sh
 make -C software
-python scripts/elf_to_vhdl.py software/build/smoke.bin \
+python3 scripts/elf_to_vhdl.py software/build/smoke.bin \
   rtl/memory/program_image_pkg.vhd
 ```
 
-`RISCV_PREFIX` may be overridden if the toolchain uses a prefix other than
-`riscv64-unknown-elf-`.
+Override the toolchain prefix when necessary:
 
-## Implementation order
+```sh
+make -C software RISCV_PREFIX=riscv32-unknown-elf-
+```
 
-1. Verify the board smoke build and reset behavior.
-2. Complete and unit-test the ALU, register file, and decoder.
-3. Complete the fixed-latency memories and memory bus.
-4. Implement the multi-cycle core FSM and retirement trace.
-5. Run hand-written programs, then RISC-V architectural tests.
-6. Replace the smoke logic in `basys3_top.vhd` with the integrated CPU system.
+The Makefile targets `-march=rv32i -mabi=ilp32`; its default prefix is
+`riscv64-unknown-elf-`. Despite its filename, `elf_to_vhdl.py` accepts a flat
+little-endian binary, not an ELF file. It replaces the checked-in program-image
+package, pads the last word, and rejects images larger than 16 KiB. Recompile
+simulation or FPGA sources after generating a new image.
+
+The board pivot preserves the ROM/RAM addresses and GPIO register addresses.
+The future CPU integration will display the low ten LED-register bits. The current startup
+sets the stack and clears `.bss`, but does not copy initialized `.data` from ROM
+to RAM; add that support before relying on initialized writable variables.
+The smoke program cannot execute until the core and board integration exist.
+
+## Next milestones
+
+1. Program the compiled smoke image on a DE10-Lite and verify the physical
+   reset, switch, and heartbeat behavior.
+2. Expand ALU and register-file edge-case tests, then connect the completed
+   decoder to the execution core.
+3. Verify memory byte lanes, request/response timing, and rejected accesses.
+4. Implement the multi-cycle core with checked retirement and trap behavior.
+5. Run directed and mixed programs, then integrate architectural tests.
+6. Connect the CPU system to the DE10-Lite wrapper and run LED-visible software.
