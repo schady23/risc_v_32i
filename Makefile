@@ -7,9 +7,9 @@ CABLE ?= USB-Blaster
 .PHONY: help test project build timing program software image
 
 help:
-	@echo "make test      Run the five active GHDL testbenches"
+	@echo "make test      Run the seven active GHDL testbenches"
 	@echo "make project   Generate the DE10-Lite Quartus project"
-	@echo "make build     Compile the smoke design and check timing"
+	@echo "make build     Compile the CPU system and check timing"
 	@echo "make timing    Recheck timing for an existing compilation"
 	@echo "make program   Configure the board with the existing .sof"
 	@echo "make image     Build software and regenerate the ROM package"

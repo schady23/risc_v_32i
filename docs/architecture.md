@@ -4,11 +4,9 @@ This document defines cycle-level and architectural behavior before CPU
 implementation. Behavior not described here must be resolved here before it is
 encoded in RTL.
 
-The hardware target is the Terasic DE10-Lite. This contract describes the
-intended CPU and board integration. The decoder is implemented; the core remains a scaffold;
-`de10_lite_top` currently implements a standalone board smoke test. The
-[bring-up guide](bringup.md) describes the working Quartus build and the
-remaining CPU integration.
+The hardware target is the Terasic DE10-Lite. The decoder, multi-cycle core,
+and board integration implement this contract. The [bring-up guide](bringup.md)
+distinguishes simulation results from the pending CPU Quartus build and board test.
 
 ## Scope
 
@@ -187,11 +185,10 @@ does not change the peripheral interface or register addresses:
 - All GPIO accesses remain aligned word accesses. Drive `d_be="1111"` for
   word loads as well as stores; byte/halfword load masks must identify their
   addressed lanes so GPIO can reject unsupported widths.
-- The status register exposes `status_i` and is read-only. The CPU wrapper's
-  status-bit layout is not yet defined; define it here before software uses it.
+- The status register exposes `status_i` and is read-only. The CPU wrapper
+  currently ties it to zero; define a bit layout before software uses it.
 - Buttons and seven-segment displays have no MMIO registers in this version.
-  All ten LEDs belong to software during normal CPU operation; the smoke
-  heartbeat is a separate pre-CPU design.
+  All ten LEDs belong to software during normal CPU operation.
 
 ## Endianness and byte enables
 

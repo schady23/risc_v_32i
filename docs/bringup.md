@@ -2,10 +2,11 @@
 
 ## Status and prerequisites
 
-The repository includes a DE10-Lite smoke wrapper, pin and timing constraints,
-a board testbench, and Quartus project/build/programming scripts. The compiled
-image exercises the board I/O; CPU execution is not implemented yet. See
-[validation results](#validation-results) for completed checks.
+The repository includes an integrated DE10-Lite CPU wrapper, pin and timing
+constraints, a board testbench, and Quartus project/build/programming scripts.
+The checked-in ROM demo writes `0x155` to the LED register and loops. The CPU
+system passes GHDL simulation; Quartus compilation and physical board operation
+remain to be checked. See [validation results](#validation-results).
 
 Required tools and hardware:
 
@@ -43,7 +44,7 @@ out of the initial top-level interface; configure unused pins appropriately.
 
 | File | Responsibility |
 | --- | --- |
-| [`rtl/board/de10_lite_top.vhd`](../rtl/board/de10_lite_top.vhd) | 50 MHz smoke counter, synchronized switches, active-low button reset |
+| [`rtl/board/de10_lite_top.vhd`](../rtl/board/de10_lite_top.vhd) | 50 MHz CPU, memory bus, GPIO LEDs, and active-low button reset |
 | [`rtl/board/reset_synchronizer.vhd`](../rtl/board/reset_synchronizer.vhd) | Asynchronous assertion, two-stage release, Quartus synchronizer attributes |
 | [`constraints/de10_lite_pins.tcl`](../constraints/de10_lite_pins.tcl) | All 23 top-level pin locations, I/O standards, and explicit LED drive strength |
 | [`constraints/de10_lite.sdc`](../constraints/de10_lite.sdc) | Clock, uncertainty, and asynchronous external-I/O timing exceptions |
@@ -51,12 +52,11 @@ out of the initial top-level interface; configure unused pins appropriately.
 | [`scripts/build.tcl`](../scripts/build.tcl) | Quartus compilation, report collection, and timing validation |
 | [`scripts/check_timing.tcl`](../scripts/check_timing.tcl) | Multi-corner timing, constraint checks, and unconstrained-path checks |
 | [`scripts/program.tcl`](../scripts/program.tcl) | USB-Blaster JTAG configuration with a `.sof` |
-| [`sim/tb_de10_lite_top.vhd`](../sim/tb_de10_lite_top.vhd) | Reset, switch, unused-input, and heartbeat checks |
+| [`sim/tb_de10_lite_top.vhd`](../sim/tb_de10_lite_top.vhd) | LED software demo, button reset, and restart checks |
 
-The original board-specific files have been replaced. Board-independent CPU,
-memory, and GPIO modules retain their interfaces. Connecting GPIO to this
-wrapper is part of the later CPU integration described in the
-[architecture contract](architecture.md#de10-lite-gpio-integration).
+The CPU, memory bus, and GPIO are connected in the wrapper according to the
+[architecture contract](architecture.md#de10-lite-gpio-integration). The GPIO
+module synchronizes all ten switch inputs before software reads them.
 
 ## Create and compile the Quartus project
 
@@ -149,29 +149,31 @@ that until the smoke and CPU builds work. See the
 [MAX 10 configuration guide](https://docs.altera.com/r/docs/683865/current/max-10-fpga-configuration-user-guide/configuring-max-10-devices-using-jtag-configuration?contentId=8xFe_De5VEDzB~BeH3M5cA)
 for JTAG configuration details.
 
-## Smoke acceptance criteria
+## CPU demo acceptance criteria
 
-- `LEDR(8 downto 0)` mirrors synchronized `SW(8 downto 0)`.
-- `LEDR(9)` is a heartbeat. Using counter bit 24 at 50 MHz gives approximately
-  1.49 Hz (a full on/off period of about 0.67 seconds).
-- Holding `KEY(0)` clears all LEDs and the heartbeat counter.
-- Releasing `KEY(0)` deasserts internal reset through two clocked stages;
-  sequential smoke logic resumes on a following active edge.
-- The board simulation checks reset assertion between clock edges, synchronized
-  release, switch propagation, unused controls, and heartbeat behavior.
-  `HEARTBEAT_BIT` defaults to 24 in hardware and is set to 2 in simulation.
-
-`SW(9)` and `KEY(1)` are unused in the smoke design. In the later CPU integration, all ten
-switches are readable and all ten LEDs reflect the software LED register.
+- After reset release, the checked-in ROM program writes `0x155` to the LED
+  register. `LEDR(9 downto 0)` displays `0101010101` and stays at that value.
+- Holding `KEY(0)` clears all LEDs. Releasing it restarts execution at address
+  zero and restores the same LED pattern.
+- `SW(9 downto 0)` is available to software through the switch register.
+  `KEY(1)` remains unused.
+- The board simulation checks LED output, reset, and program restart. Physical
+  button, LED, and switch behavior still needs board verification.
 
 ## Validation results
 
-Validated on 2026-09-12 with GHDL and Quartus Prime Lite 25.1std.0
-(build 1129), targeting `10M50DAF484C7G`:
+The integrated CPU system passed seven GHDL testbenches on 2026-09-22,
+including 270,612 decoder cases, checked core retirement, directed traps,
+memory bus accesses, and the DE10-Lite LED demo. The new CPU image has not
+yet been compiled in Quartus or programmed on a physical board.
+
+The following older results are for the standalone board smoke design,
+validated on 2026-09-12 with Quartus Prime Lite 25.1std.0 (build 1129),
+targeting `10M50DAF484C7G`:
 
 | Check | Result |
 | --- | --- |
-| GHDL | All five active testbenches pass, including 270,612 decoder cases; board test completes at 471 ns |
+| GHDL | The former five-bench smoke suite passed |
 | Full Quartus compilation | Successful; `.sof` generated |
 | Worst setup slack across analyzed corners | +16.652 ns |
 | Worst hold slack across analyzed corners | +0.164 ns |
@@ -180,22 +182,21 @@ Validated on 2026-09-12 with GHDL and Quartus Prime Lite 25.1std.0
 | Smoke resource usage | 48 logic elements, 45 registers, 23 pins; no RAM or PLLs |
 | Physical board programming | Unverified; the hardware scan detected no JTAG hardware |
 
-The Quartus smoke-build results above were recorded during the board port.
-The decoder was completed afterward and is covered by the GHDL suite; it is
-not instantiated in the standalone smoke top.
+The Quartus results above do not establish CPU-system synthesis, timing,
+memory inference, or utilization. Run a fresh `make build` before programming.
 
 The compile emits expected warnings for unused `KEY(1)` / `SW(9)`, the Lite
 edition's unavailable LogicLock feature, and MAX 10's general 3.3 V input
 interface requirements. Pin locations, I/O standards, and LED drive strengths
 are explicitly assigned; the incomplete-I/O-assignment warning has been resolved.
-These results validate the smoke design, not the unfinished processor.
+These results validate the former smoke design, not the integrated processor.
 
 ## CPU bring-up
 
-1. Pass the unit, memory-bus, core retirement, and trap simulations.
-2. Generate a program image that writes `0x0000_0155` to `0x4000_0000` and loops.
-3. Connect the core, memory bus, and board I/O according to the
-   [architecture contract](architecture.md); rebuild and program the `.sof`.
+1. Run the seven simulation benches, then expand directed ISA coverage.
+2. Rebuild the connected CPU system in Quartus and inspect memory inference,
+   utilization, and timing reports.
+3. Program the resulting `.sof` and check the LED demo on the board.
 4. Confirm that the low ten LED bits show the programmed value, and that reset
    restarts execution at `0x0000_0000`.
 5. Exercise switch reads, RAM byte lanes, and branch loops before larger software.

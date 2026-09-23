@@ -24,10 +24,10 @@ sources=(
   sim/tb_memory_bus.vhd
   sim/tb_de10_lite_top.vhd
   sim/tb_core.vhd
+  sim/tb_core_execution.vhd
 )
 "$GHDL_BIN" -a --std=08 --workdir=build/ghdl "${sources[@]}"
-# tb_core is a placeholder: analyze it, but do not count it as a passing test.
-for tb in tb_alu tb_decoder tb_regfile tb_memory_bus tb_de10_lite_top; do
+for tb in tb_alu tb_decoder tb_regfile tb_memory_bus tb_de10_lite_top tb_core tb_core_execution; do
   timeout 30s "$GHDL_BIN" --elab-run --std=08 --workdir=build/ghdl "$tb" \
     --assert-level=error
 done
