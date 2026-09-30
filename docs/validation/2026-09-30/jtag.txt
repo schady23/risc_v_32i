@@ -1,0 +1,5 @@
+2026-09-30
+Quartus Prime Lite 25.1std.0 build 1129
+Command: quartus_pgm --list
+Result: No JTAG hardware available
+No programming or physical LED/reset validation performed.

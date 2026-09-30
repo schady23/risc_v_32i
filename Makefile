@@ -4,10 +4,10 @@ QUARTUS_STA ?= quartus_sta
 PYTHON ?= python3
 CABLE ?= USB-Blaster
 
-.PHONY: help test project build timing program software image
+.PHONY: help test project build timing program software image test-adapter
 
 help:
-	@echo "make test      Run the seven active GHDL testbenches"
+	@echo "make test      Run seven GHDL benches and 13 directed programs"
 	@echo "make project   Generate the DE10-Lite Quartus project"
 	@echo "make build     Compile the CPU system and check timing"
 	@echo "make timing    Recheck timing for an existing compilation"
@@ -34,3 +34,7 @@ software:
 
 image: software
 	$(PYTHON) scripts/elf_to_vhdl.py software/build/smoke.bin rtl/memory/program_image_pkg.vhd
+
+# Analyze benches with make test first; this target also needs LLVM tools.
+test-adapter: test
+	$(PYTHON) scripts/test_arch_adapter.py

@@ -168,7 +168,10 @@ the target.
 
 ROM and RAM use FPGA on-chip memory for the initial implementation. External
 SDRAM and user flash are outside this address map and require separate future
-design work. Confirm memory inference and capacity in the Quartus reports.
+design work. The September 30 Quartus build confirms RAM inference in four byte banks
+using 16 M9Ks. Store response data is unspecified and is not consumed; read
+responses retain the one-cycle timing above. Recheck inference and capacity
+when images or memory RTL change.
 
 ### DE10-Lite GPIO integration
 

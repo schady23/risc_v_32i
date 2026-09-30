@@ -6,8 +6,8 @@ the Terasic DE10-Lite. The board uses a MAX 10 `10M50DAF484C7G` FPGA; see
 
 The multi-cycle core, memory bus, and GPIO are connected to the DE10-Lite top
 level. The checked-in ROM contains a four-instruction demo that writes
-`0x155` to the ten LEDs and loops. Simulation has passed; the new CPU FPGA
-image still needs Quartus compilation and physical board validation.
+`0x155` to the ten LEDs and loops. Simulation and the integrated Quartus build pass, including 50 MHz timing
+checks. Physical board validation remains pending; no JTAG hardware was detected.
 
 ## Documentation
 
@@ -17,20 +17,20 @@ image still needs Quartus compilation and physical board validation.
   commands, programming instructions, and validation results.
 - [Simulation and testbenches](sim/README.md): runnable GHDL commands, current
   coverage, and verification milestones.
-- [Architectural tests](sim/arch-test/README.md): future DUT adapter requirements.
+- [Architectural tests](sim/arch-test/README.md): local binary adapter and remaining upstream integration.
 
 ## Current implementation
 
 | Component | Status |
 | --- | --- |
 | Shared packages | Types, ALU operations, core states, trap codes, and memory map defined |
-| ALU | All ten RV32I ALU operations implemented; directed coverage is limited |
+| ALU | All ten operations implemented; boundary execution checks pass |
 | Register file | Two read ports, synchronous write/reset, and protected `x0` implemented |
 | Decoder | All 40 RV32I instructions decoded; legality, immediates, and typed execution controls tested |
 | Core | Multi-cycle execution, retirement trace, alignment/access traps, and halt on fault implemented |
 | ROM, RAM, memory bus, GPIO | Synchronous implementations with directed access and byte-lane checks |
 | Board support | CPU system top level, pin/timing constraints, Quartus build and JTAG scripts |
-| Simulation | Seven active testbenches, including 270,612 decoder cases and core execution checks |
+| Simulation | Seven fixed benches plus 13 directed programs; 270,612 decoder cases |
 
 ## Repository layout
 
@@ -53,16 +53,17 @@ software/     Linker script, startup code, smoke program, and Makefile
 From the repository root:
 
 ```sh
-make test       # Run the seven active GHDL testbenches
+make test       # Run seven fixed benches and 13 directed programs
 make build      # Generate the Quartus project, compile, and check timing
+make test-adapter # Check local adapter pass/fail/trap/timeout paths (LLVM required)
 ```
 
 Use Quartus Prime Lite or Standard with MAX 10 support installed; see the
 [Quartus edition comparison](https://www.intel.com/content/www/us/en/products/details/fpga/development-tools/quartus-prime/resource.html).
 The build creates `build/quartus/risc_v_32i.qpf` and
 `build/quartus/output_files/risc_v_32i.sof`. Timing and utilization reports are
-written under `build/reports/`. The earlier standalone smoke design compiled
-with Quartus Prime Lite 25.1; the integrated CPU image needs a fresh build.
+written under `build/reports/`. The integrated CPU build passed with Quartus
+Prime Lite 25.1 on September 30, 2026 (985 logic elements, 20 M9Ks).
 See [validation results](docs/bringup.md#validation-results).
 
 With a DE10-Lite connected, use the [JTAG instructions](docs/bringup.md#configure-the-board-through-jtag)
@@ -107,9 +108,7 @@ rebuild the simulation and FPGA project afterward.
 
 ## Next milestones
 
-1. Compile the integrated CPU image in Quartus and review timing, utilization,
-   and ROM/RAM inference.
-2. Program a DE10-Lite and verify the LED demo and reset behavior.
-3. Expand core tests to all load/store widths, branch and jump variants, and
-   longer mixed programs.
-4. Run the RISC-V architectural tests and address any failures.
+1. Program a DE10-Lite and verify the LED demo and reset behavior.
+2. Extend mixed-program tests and reset coverage across every core state.
+3. Complete shared image loading, initialized data, and ACT4 platform inputs.
+4. Run compatible upstream architectural tests and document results/exclusions.

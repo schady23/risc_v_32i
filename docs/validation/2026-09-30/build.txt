@@ -1,0 +1,9 @@
+2026-09-30
+Command: make build
+Quartus Prime Lite 25.1std.0 build 1129
+Device: 10M50DAF484C7G
+Full compilation and explicit multi-corner timing checks passed.
+RAM: four 4096x8 banks, 16 M9Ks total. ROM: two optimized 4096x3 memories, 4 M9Ks.
+Configuration mode: SINGLE IMAGE WITH ERAM
+SOF SHA256: cfac5843d698fd7dff5d3d4468979f93917285bcd1e43cc7d20cf480ce476620
+Remaining warnings: unused KEY(1), Lite LogicLock feature, MAX 10 3.3 V interfaces.

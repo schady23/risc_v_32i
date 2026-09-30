@@ -1,0 +1,15 @@
+Operating conditions: Slow 1200mV 85C Model
+  setup worst slack: 4.803 ns
+  hold worst slack: 0.342 ns
+  recovery: no applicable paths
+  removal: no applicable paths
+Operating conditions: Slow 1200mV 0C Model
+  setup worst slack: 6.077 ns
+  hold worst slack: 0.307 ns
+  recovery: no applicable paths
+  removal: no applicable paths
+Operating conditions: Fast 1200mV 0C Model
+  setup worst slack: 13.472 ns
+  hold worst slack: 0.150 ns
+  recovery: no applicable paths
+  removal: no applicable paths

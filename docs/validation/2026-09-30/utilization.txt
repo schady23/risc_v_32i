@@ -1,0 +1,18 @@
+Fitter Status : Successful - Wed Sep 30 10:41:46 2026
+Quartus Prime Version : 25.1std.0 Build 1129 10/21/2025 SC Lite Edition
+Revision Name : risc_v_32i
+Top-level Entity Name : de10_lite_top
+Family : MAX 10
+Device : 10M50DAF484C7G
+Timing Models : Final
+Total logic elements : 985 / 49,760 ( 2 % )
+    Total combinational functions : 896 / 49,760 ( 2 % )
+    Dedicated logic registers : 490 / 49,760 ( < 1 % )
+Total registers : 490
+Total pins : 23 / 360 ( 6 % )
+Total virtual pins : 0
+Total memory bits : 155,648 / 1,677,312 ( 9 % )
+Embedded Multiplier 9-bit elements : 0 / 288 ( 0 % )
+Total PLLs : 0 / 4 ( 0 % )
+UFM blocks : 0 / 1 ( 0 % )
+ADC blocks : 0 / 2 ( 0 % )

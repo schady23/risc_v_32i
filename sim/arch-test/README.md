@@ -1,45 +1,51 @@
-# RISC-V Architectural Tests
+# RISC-V Architectural Test Adapter
 
-## Status
+## Current status
 
-Architectural tests are not integrated. The core is an inactive scaffold, and
-`sim/tb_core.vhd` has no execution harness. Complete the
-[directed simulation milestones](../README.md#verification-milestones) first.
-Changing the target board to DE10-Lite does not change the intended ISA or
-memory map defined in the [architecture contract](../../docs/architecture.md).
+The multi-cycle core executes instructions. `sim/tb_program.vhd` checks directed
+retirement traces; `sim/tb_arch_program.vhd` supplies a first local runner for
+self-checking flat binaries. Upstream ACT4 tests have **not** been generated or
+run, and no architectural certification is claimed.
 
-## Integration plan
+The [upstream ACT4 README](https://github.com/riscv/riscv-arch-test) describes
+self-checking ELFs generated using a DUT configuration, platform macros, linker
+script, and Sail reference results. This local adapter is groundwork for that
+flow, not a replacement for those inputs.
 
-Use the upstream [RISC-V Architectural Certification Tests](https://github.com/riscv/riscv-arch-test).
-The upstream documentation currently describes ACT4, which generates
-self-checking ELF tests and requires DUT configuration, platform macros, and a
-linker script. Pin the selected upstream revision and record its required tools
-when implementing the adapter.
+## Local completion contract
 
-Configure the DUT for RV32I, little-endian operation, `XLEN=32`, `IALIGN=32`,
-no misaligned data accesses, and no optional extensions. This project has no
-CSR/privileged execution environment and halts on traps. Establish which
-upstream tests can run in that environment before claiming coverage; tests
-requiring a privileged trap handler need a compatible adaptation or explicit
-exclusion.
+- Code starts at zero in a 16 KiB ROM image. Data accesses use the real memory
+  bus, RAM, and GPIO. Each simulation starts with zero-initialized RAM.
+- Reserve RAM word `0x00013FFC` for completion. An accepted aligned `SW` of
+  `1` passes; any other value fails. It is ordinary RAM observed by the
+  simulator, not a new MMIO register. The status MMIO register remains read-only.
+- Unexpected traps, byte/halfword completion stores, bus faults, a cycle limit,
+  and a 30-second wall-clock limit fail. A loop without completion cannot pass.
+- `linker.ld` reserves the completion word and rejects initialized `.data`;
+  implementing ROM-to-RAM initialization remains necessary for tests needing it.
+- The harness loads the supplied instruction image, while data reads from ROM
+  still use the built-in board image. Tests reading their own code/constants
+  through the data port require shared image loading before upstream use.
 
-The adapter must provide:
+After `make test` analyzes the benches:
 
-- A linker layout matching the 16 KiB ROM at `0x0000_0000` and 16 KiB RAM at
-  `0x0001_0000`, plus an image-loading path suitable for the simulator.
-- DUT-specific completion and failure reporting, with an explicit timeout.
-- Initialization of any required RAM data; the current software startup only
-  clears `.bss` and does not copy `.data` from ROM.
-- Result collection from test completion, memory, and retirement/trap signals,
-  with failures reported to the invoking process.
-- A record of the upstream revision, DUT configuration, executed tests,
-  exclusions, and results.
+```sh
+make test-adapter
+python3 scripts/run_arch_binary.py path/to/test.bin --max-cycles 100000
+```
 
-**No writable test-status or signature MMIO register exists today.** The debug
-status address `0x4000_0008` is read-only. Define a simulator-observed RAM
-completion convention or a separately documented test interface before writing
-the adapter; do not use that register as a writable completion mailbox.
+`make test-adapter` requires Clang, LLD, and llvm-objcopy. It assembles the
+tracked `adapter_selftest.S` and checks pass, explicit failure, unexpected trap,
+and timeout paths. The binary runner itself requires only Python and GHDL.
+Flat images must be nonempty, at most 16 KiB, and linked at address zero.
 
-Architectural tests complement the directed timing, alignment, trap, and
-retirement checks. Passing simulations also does not replace Quartus timing
-analysis or [DE10-Lite hardware bring-up](../../docs/bringup.md).
+## Remaining ACT4 work
+
+Pin an upstream revision and record its tools; provide a validated RV32I UDB
+configuration and `rvmodel_macros.h`; connect pass/fail macros to the RAM
+completion convention; load the same image on both ROM ports and initialize
+RAM data. This DUT has XLEN 32, IALIGN 32, no optional extensions or privileged
+CSRs, and halts on traps. Review test requirements and document exclusions
+before running any upstream suite. Record executed tests and their individual
+results. Directed timing, trap, and retirement tests and physical FPGA checks
+remain separate validation steps.

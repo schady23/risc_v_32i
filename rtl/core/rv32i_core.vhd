@@ -47,7 +47,6 @@ architecture rtl of rv32i_core is
   signal trap_cause : trap_cause_t := (others => '0');
   signal trap_pc, trap_tval : word_t := (others => '0');
 
-  signal legal : std_logic := '0';
   signal rs1, rs2, rd : reg_index_t := (others => '0');
   signal immediate : word_t := (others => '0');
   signal control : decode_control_t := DECODE_CONTROL_ILLEGAL;
@@ -67,7 +66,7 @@ architecture rtl of rv32i_core is
   end function;
 begin
   decoder : entity work.rv32i_decoder
-    port map (instr_i => instr, legal_o => legal, rs1_o => rs1,
+    port map (instr_i => instr, legal_o => open, rs1_o => rs1,
               rs2_o => rs2, rd_o => rd, imm_o => immediate, ctrl_o => control);
 
   registers : entity work.rv32i_regfile

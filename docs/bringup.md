@@ -5,8 +5,8 @@
 The repository includes an integrated DE10-Lite CPU wrapper, pin and timing
 constraints, a board testbench, and Quartus project/build/programming scripts.
 The checked-in ROM demo writes `0x155` to the LED register and loops. The CPU
-system passes GHDL simulation; Quartus compilation and physical board operation
-remain to be checked. See [validation results](#validation-results).
+system passes GHDL simulation and a full Quartus build with timing checks.
+Physical board operation remains unverified. See [validation results](#validation-results).
 
 Required tools and hardware:
 
@@ -101,13 +101,12 @@ external interface changes.
 The timing script checks setup, hold, recovery, and removal paths at all
 operating corners returned for the selected device. It rejects negative slack,
 missing setup paths, constraint issues, and unconstrained paths. The current
-smoke design uses synchronous internal reset consumption, so no recovery or
+CPU design uses synchronous internal reset consumption, so no recovery or
 removal paths remain after the external button exception. The reports state
 that explicitly rather than claiming those path types were exercised.
 
-The generated project keeps unused FPGA pins as tri-stated inputs. The smoke
-build does not instantiate CPU memories; review memory inference and utilization
-again after CPU integration.
+The generated project keeps unused FPGA pins as tri-stated inputs. The CPU build uses 16 M9Ks for RAM and four for the optimized two-port ROM.
+Recheck inference and capacity whenever the program image or memory design changes.
 
 ## Configure the board through JTAG
 
@@ -162,38 +161,48 @@ for JTAG configuration details.
 
 ## Validation results
 
-The integrated CPU system passed seven GHDL testbenches on 2026-09-22,
-including 270,612 decoder cases, checked core retirement, directed traps,
-memory bus accesses, and the DE10-Lite LED demo. The new CPU image has not
-yet been compiled in Quartus or programmed on a physical board.
-
-The following older results are for the standalone board smoke design,
-validated on 2026-09-12 with Quartus Prime Lite 25.1std.0 (build 1129),
-targeting `10M50DAF484C7G`:
+The integrated CPU system was validated on September 30, 2026 with Quartus
+Prime Lite 25.1std.0 (build 1129), targeting `10M50DAF484C7G` at 50 MHz.
+[Archived evidence](validation/2026-09-30/build.txt) records the build and SOF
+hash; simulation, utilization, timing, constraints, and JTAG results are in the
+same directory.
 
 | Check | Result |
 | --- | --- |
-| GHDL | The former five-bench smoke suite passed |
-| Full Quartus compilation | Successful; `.sof` generated |
-| Worst setup slack across analyzed corners | +16.652 ns |
-| Worst hold slack across analyzed corners | +0.164 ns |
+| GHDL | Seven fixed benches and 13 directed execution programs passed |
+| Decoder | 270,612 cases passed |
+| Local architectural adapter | Pass, explicit fail, trap, and timeout paths checked; no upstream suite run |
+| Full Quartus compilation | Successful; fresh `.sof` generated |
+| Worst setup slack across three corners | +4.803 ns |
+| Worst hold slack across three corners | +0.150 ns |
 | Constraint checks / unconstrained paths | Zero issues / zero unconstrained paths |
-| Synchronizers | Ten recognized chains, each with two registers |
-| Smoke resource usage | 48 logic elements, 45 registers, 23 pins; no RAM or PLLs |
-| Physical board programming | Unverified; the hardware scan detected no JTAG hardware |
+| Recovery / removal | No applicable paths after external button exception |
+| Synchronizers | Eleven recognized chains; shortest length two registers |
+| Resource use | 985 logic elements, 490 registers, 23 pins, 155,648 memory bits, 20 M9Ks |
+| Physical board | No JTAG hardware available; LED/reset behavior unverified |
 
-The Quartus results above do not establish CPU-system synthesis, timing,
-memory inference, or utilization. Run a fresh `make build` before programming.
+The initial RAM implementation expanded into 131,072 flip-flops and exceeded
+the device capacity. `ram_byte_bank.vhd` now isolates the Quartus Standard
+single-port inference template; four 4096x8 banks implement byte enables using
+16 M9Ks. The sparse demo ROM is optimized into two 4096x3 inferred ROMs using
+four additional M9Ks; its logical address space remains 16 KiB. This is
+image-dependent utilization, not a guarantee for every future image.
 
-The compile emits expected warnings for unused `KEY(1)` / `SW(9)`, the Lite
-edition's unavailable LogicLock feature, and MAX 10's general 3.3 V input
-interface requirements. Pin locations, I/O standards, and LED drive strengths
-are explicitly assigned; the incomplete-I/O-assignment warning has been resolved.
-These results validate the former smoke design, not the integrated processor.
+Initialized MAX 10 memories also require an initialization-capable configuration
+mode. The generated project sets `INTERNAL_FLASH_UPDATE_MODE` to
+`SINGLE IMAGE WITH ERAM`; this resolves assembler error 14703. See the
+[Intel MAX 10 memory guide](https://www.intel.com/programmable/technical-pdfs/683431.pdf)
+for the configuration requirement. Programming still uses the volatile `.sof`;
+no persistent flash programming was performed.
+
+The remaining compile warnings concern unused `KEY(1)`, the Lite edition's
+unavailable LogicLock feature, and MAX 10's general 3.3 V input requirements.
+Pin locations, standards, and LED drive strengths are assigned. GPIO switch
+synchronizers have explicit preservation/identification attributes.
 
 ## CPU bring-up
 
-1. Run the seven simulation benches, then expand directed ISA coverage.
+1. Run the fixed benches and directed programs with `make test`.
 2. Rebuild the connected CPU system in Quartus and inspect memory inference,
    utilization, and timing reports.
 3. Program the resulting `.sof` and check the LED demo on the board.

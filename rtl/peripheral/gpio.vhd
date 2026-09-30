@@ -25,6 +25,11 @@ architecture rtl of gpio is
   signal switch_meta : std_logic_vector(15 downto 0) := (others => '0');
   signal switch_sync : std_logic_vector(15 downto 0) := (others => '0');
   signal led_register : std_logic_vector(15 downto 0) := (others => '0');
+  attribute preserve : boolean;
+  attribute preserve of switch_meta, switch_sync : signal is true;
+  attribute altera_attribute : string;
+  attribute altera_attribute of switch_meta, switch_sync : signal is
+    "-name SYNCHRONIZER_IDENTIFICATION ""FORCED IF ASYNCHRONOUS""";
 begin
   process (clk_i)
   begin

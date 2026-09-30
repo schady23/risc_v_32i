@@ -13,6 +13,7 @@ sources=(
   rtl/core/rv32i_decoder.vhd
   rtl/core/rv32i_core.vhd
   rtl/memory/instruction_rom.vhd
+  rtl/memory/ram_byte_bank.vhd
   rtl/memory/data_ram.vhd
   rtl/peripheral/gpio.vhd
   rtl/interconnect/memory_bus.vhd
@@ -24,6 +25,8 @@ sources=(
   sim/tb_memory_bus.vhd
   sim/tb_de10_lite_top.vhd
   sim/tb_core.vhd
+  sim/tb_arch_program.vhd
+  sim/tb_program.vhd
   sim/tb_core_execution.vhd
 )
 "$GHDL_BIN" -a --std=08 --workdir=build/ghdl "${sources[@]}"
@@ -31,3 +34,5 @@ for tb in tb_alu tb_decoder tb_regfile tb_memory_bus tb_de10_lite_top tb_core tb
   timeout 30s "$GHDL_BIN" --elab-run --std=08 --workdir=build/ghdl "$tb" \
     --assert-level=error
 done
+
+"${PYTHON:-python3}" scripts/test_execution.py
