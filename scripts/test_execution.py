@@ -118,7 +118,7 @@ for kind,f3,offset in [('load',1,1),('load',5,3),('load',2,2),('store',1,3),('st
     terminal=imm(3,3,f3,1,offset) if kind=='load' else store(f3,2,offset)
     p.finish(f'misaligned_{kind}_{f3}_{offset}',4 if kind=='load' else 6,0x10000+offset,terminal)
 for name,address,f3,write in [('load_x0_fault',0x20000,2,False),('rom_store',0,2,True),
-    ('gpio_byte',0x40000000,0,False),('gpio_half',0x40000000,1,False),('readonly_store',0x40000004,2,True)]:
+    ('uart_byte',0x40000008,0,False),('uart_half',0x40000008,1,False),('readonly_store',0x40000004,2,True)]:
     p=Program(); p.li(1,address); p.requests=1
     terminal=store(f3,2,0) if write else imm(3,0,f3,1,0)
     p.finish(name,7 if write else 5,address,terminal)

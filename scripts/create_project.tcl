@@ -10,6 +10,7 @@ if {[is_project_open]} {
     error "Close the current project before generating the DE10-Lite project"
 }
 file mkdir $project_dir
+source [file join $root_dir scripts generate_jtag_ip.tcl]
 # This is a generated project. Tracked sources/constraints are authoritative.
 project_new [file join $project_dir $project_name] -overwrite
 set_global_assignment -name FAMILY "MAX 10"
@@ -34,14 +35,16 @@ foreach source {
     rtl/memory/instruction_rom.vhd
     rtl/memory/ram_byte_bank.vhd
     rtl/memory/data_ram.vhd
-    rtl/peripheral/gpio.vhd
+    rtl/peripheral/jtag_uart_adapter.vhd
     rtl/interconnect/memory_bus.vhd
     rtl/board/reset_synchronizer.vhd
+    rtl/board/rv32i_system.vhd
     rtl/board/de10_lite_top.vhd
 } {
     set_global_assignment -name VHDL_FILE [file join $root_dir $source]
 }
 set_global_assignment -name SDC_FILE [file join $root_dir constraints de10_lite.sdc]
+set_global_assignment -name QIP_FILE $jtag_qip
 source [file join $root_dir constraints de10_lite_pins.tcl]
 export_assignments
 project_close

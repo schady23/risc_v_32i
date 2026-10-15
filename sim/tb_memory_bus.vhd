@@ -3,6 +3,7 @@ use ieee.std_logic_1164.all;
 use std.env.all;
 
 use work.rv32i_pkg.all;
+use work.program_image_pkg.all;
 
 entity tb_memory_bus is
 end entity;
@@ -12,9 +13,9 @@ architecture test of tb_memory_bus is
   signal i_req, i_fault : std_logic := '0';
   signal i_addr, i_rdata : word_t := (others => '0');
   signal d_req, d_write, d_fault : std_logic := '0';
-  signal d_addr, d_wdata, d_rdata, status : word_t := (others => '0');
+  signal d_addr, d_wdata, d_rdata : word_t := (others => '0');
   signal d_be : byte_enable_t := (others => '0');
-  signal switches, leds : std_logic_vector(15 downto 0) := (others => '0');
+
 begin
   clk <= not clk after 5 ns;
 
@@ -24,7 +25,8 @@ begin
       i_req_i => i_req, i_addr_i => i_addr, i_rdata_o => i_rdata, i_fault_o => i_fault,
       d_req_i => d_req, d_write_i => d_write, d_addr_i => d_addr,
       d_wdata_i => d_wdata, d_be_i => d_be, d_rdata_o => d_rdata, d_fault_o => d_fault,
-      switches_i => switches, status_i => status, leds_o => leds
+      av_address_o => open, av_read_o => open, av_write_o => open,
+      av_writedata_o => open, av_readdata_i => x"00000000", av_waitrequest_i => '1'
     );
 
   process
@@ -63,7 +65,7 @@ begin
     wait until rising_edge(clk);
     i_req <= '0';
     wait for 1 ns;
-    assert i_fault = '0' and i_rdata = x"400002B7"
+    assert i_fault = '0' and i_rdata = PROGRAM_IMAGE(0)
       report "ROM instruction fetch failed" severity failure;
     i_addr <= x"00004000";
     i_req <= '1';
@@ -72,9 +74,9 @@ begin
     wait for 1 ns;
     assert i_fault = '1' report "out-of-ROM fetch did not fault" severity failure;
 
-    access_bus(x"00000004", '0', (others => '0'), "1111", '0', x"15500313");
+    access_bus(x"00000004", '0', (others => '0'), "1111", '0', PROGRAM_IMAGE(1));
     access_bus(x"00000004", '1', x"FFFFFFFF", "1111", '1', (others => '0'));
-    access_bus(x"00000004", '0', (others => '0'), "1111", '0', x"15500313");
+    access_bus(x"00000004", '0', (others => '0'), "1111", '0', PROGRAM_IMAGE(1));
 
     access_bus(x"00010000", '1', x"11223344", "1111", '0', (others => '0'), false);
     access_bus(x"00010000", '0', (others => '0'), "1111", '0', x"11223344");
@@ -83,19 +85,33 @@ begin
     access_bus(x"00013FFC", '1', x"55667788", "1111", '0', (others => '0'), false);
     access_bus(x"00013FFC", '0', (others => '0'), "1111", '0', x"55667788");
 
-    access_bus(x"40000000", '1', x"00000155", "1111", '0', (others => '0'), false);
-    assert leds = x"0155" report "GPIO LED write failed" severity failure;
+    -- Execute from both RAM boundaries. Also reject a conflicting data store.
+    i_req <= '1'; i_addr <= x"00010000";
+    wait until rising_edge(clk); i_req <= '0'; wait for 1 ns;
+    assert i_fault = '0' and i_rdata = x"1122AA44" report "RAM fetch failed" severity failure;
+    wait until rising_edge(clk); wait for 1 ns;
+    i_req <= '1'; i_addr <= x"00013FFC";
+    d_req <= '1'; d_write <= '1'; d_addr <= x"00013FFC";
+    d_wdata <= x"FFFFFFFF"; d_be <= "1111";
+    wait until rising_edge(clk); i_req <= '0'; d_req <= '0'; wait for 1 ns;
+    assert i_fault = '0' and i_rdata = x"55667788" and d_fault = '1'
+      report "RAM arbitration did not preserve instruction data" severity failure;
+    wait until rising_edge(clk); wait for 1 ns;
+    access_bus(x"00013FFC", '0', (others => '0'), "1111", '0', x"55667788");
+    i_req <= '1'; i_addr <= x"00014000";
+    wait until rising_edge(clk); i_req <= '0'; wait for 1 ns;
+    assert i_fault = '1' report "RAM upper bound fetch did not fault" severity failure;
+    wait until rising_edge(clk); wait for 1 ns;
+
+    access_bus(x"40000008", '0', (others => '0'), "1111", '0', x"00000001");
     access_bus(x"40000000", '1', x"FFFFFFFF", "0001", '1', (others => '0'));
-    assert leds = x"0155" report "rejected GPIO write changed LEDs" severity failure;
-    access_bus(x"40000000", '0', (others => '0'), "1111", '0', x"00000155");
-    switches <= x"02A5";
-    status <= x"12345678";
-    wait until rising_edge(clk);
-    wait until rising_edge(clk);
-    access_bus(x"40000004", '0', (others => '0'), "1111", '0', x"000002A5");
-    access_bus(x"40000008", '0', (others => '0'), "1111", '0', x"12345678");
+    access_bus(x"40000000", '0', (others => '0'), "1111", '1', (others => '0'));
+    access_bus(x"40000004", '0', (others => '0'), "1111", '1', (others => '0'));
     access_bus(x"40000004", '1', x"FFFFFFFF", "1111", '1', (others => '0'));
-    access_bus(x"40000008", '1', x"FFFFFFFF", "1111", '1', (others => '0'));
+    access_bus(x"40000008", '0', (others => '0'), "0011", '1', (others => '0'));
+    access_bus(x"40000000", '1', x"000000A5", "1111", '0', (others => '0'), false);
+    access_bus(x"40000008", '0', (others => '0'), "1111", '0', x"00000004");
+    access_bus(x"40000000", '1', x"000000FF", "1111", '1', (others => '0'));
     access_bus(x"DEADBEEF", '0', (others => '0'), "1111", '1', (others => '0'));
 
     report "tb_memory_bus passed" severity note;

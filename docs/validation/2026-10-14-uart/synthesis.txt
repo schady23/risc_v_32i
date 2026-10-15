@@ -1,0 +1,32 @@
+rtl/board/reset_synchronizer.vhd:18:13:warning: unhandled attribute "altera_attribute" [-Wunhandled-attribute]
+  attribute altera_attribute of sync_stages : signal is
+            ^
+rtl/board/reset_synchronizer.vhd:16:13:warning: unhandled attribute "preserve" [-Wunhandled-attribute]
+  attribute preserve of sync_stages : signal is true;
+            ^
+rtl/memory/program_image_pkg.vhd:11:12:note: found ROM "n1343", width: 32 bits, depth: 4096
+  constant PROGRAM_IMAGE : program_image_t := (
+           ^
+rtl/peripheral/uart.vhd:35:13:warning: unhandled attribute "altera_attribute" [-Wunhandled-attribute]
+  attribute altera_attribute of rx_meta, rx_sync : signal is
+            ^
+rtl/peripheral/uart.vhd:35:13:warning: unhandled attribute "altera_attribute" [-Wunhandled-attribute]
+  attribute altera_attribute of rx_meta, rx_sync : signal is
+            ^
+rtl/peripheral/uart.vhd:33:13:warning: unhandled attribute "preserve" [-Wunhandled-attribute]
+  attribute preserve of rx_meta, rx_sync : signal is true;
+            ^
+rtl/peripheral/uart.vhd:33:13:warning: unhandled attribute "preserve" [-Wunhandled-attribute]
+  attribute preserve of rx_meta, rx_sync : signal is true;
+            ^
+rtl/peripheral/uart.vhd:27:10:note: found RAM "fifo", width: 8 bits, depth: 16
+  signal fifo : fifo_t;
+         ^
+rtl/memory/ram_byte_bank.vhd:20:13:warning: unhandled attribute "ramstyle" [-Wunhandled-attribute]
+  attribute ramstyle of bank : signal is "M9K";
+            ^
+rtl/memory/ram_byte_bank.vhd:17:10:note: found RAM "bank", width: 8 bits, depth: 4096
+  signal bank : bank_t := (others => (others => '0'));
+         ^
+
+Exit code: 0

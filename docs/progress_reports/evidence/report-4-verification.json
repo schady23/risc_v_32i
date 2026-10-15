@@ -1,0 +1,53 @@
+{
+  "verified_utc": "2026-10-15T17:57:14.712556+00:00",
+  "report_pages": {
+    "4": 8,
+    "5": 7
+  },
+  "template_preservation": "all original non-document parts and relationships preserved",
+  "visual_review": "all 8 pages of Report 4 and 7 pages of Report 5 inspected",
+  "source_sha256": {
+    "sim/tb_alu.vhd": "661749fca8f253325c984a8ce32fa72f7c14044d5a3c576ce5dcd914200ff9a2",
+    "sim/tb_arch_program.vhd": "bffba10b08ea1e2b0c1fd14572b475599dc5779548d4a853d040342ca8d9987b",
+    "sim/tb_core.vhd": "74b7b0757af1e9523b2681af493e6dc1b7ec16590941178c8f740b75441ed26d",
+    "sim/tb_core_execution.vhd": "12e9f60de6a1c2746a81a00766ad899d2e2cceffa0a4d862ad6635b0d92ce295",
+    "sim/tb_core_reset.vhd": "93633be0b7a242da8a9b32c66f0b09d09f9902d909492763a44224821a501906",
+    "sim/tb_de10_lite_top.vhd": "1aaa95f7beac98be4b1e5139d7af3696fc05320a95e4dda80c7b2f6101896ba3",
+    "sim/tb_decoder.vhd": "f3966830abe325892e5f2df3e25a2d40b96cd08e82cd7201ace2cdbb37006655",
+    "sim/tb_decoder_focused.vhd": "83416e0b721636ea1d026c1313a55064606c3351a8b9320a691b776f83996152",
+    "sim/tb_jtag_uart.vhd": "a21a2fc7eb0e476b32beab91a7312b5359bd2858e74f78e368d3fbc717c65170",
+    "sim/tb_memory_bus.vhd": "ece4edb675c694262b95f97e87cce6a8e1af89f47a788b8c650d286eca755dfe",
+    "sim/tb_program.vhd": "d609824347613759d6871203c2a72de4a3bbf2e1d8224aa551bff2a8d9003423",
+    "sim/tb_regfile.vhd": "2a58bed5bc21f862e1cbed942ac1f13b0b7314a72c4c96cb2249fdbcac6aeedb",
+    "rtl/board/de10_lite_top.vhd": "4b2f84b44d792e290d289d753424ba5ef6d54a61eb94471445eb6c562aab2fa7",
+    "rtl/board/reset_synchronizer.vhd": "aa6653337ec86b8a95d4852531d081abaf2ced904a878c89d6694e8b750a1e8c",
+    "rtl/board/rv32i_system.vhd": "8aa6f2f7099e4d2aa20583cba69024e2353333727a36ffe151a6f03ff8911f4f",
+    "rtl/core/rv32i_alu.vhd": "68ed13639c954289bfd55b93fa68784ff0b476f867dd5948591af1eb9f86c7a0",
+    "rtl/core/rv32i_core.vhd": "4a37eaa74dded04806ea9aedc306544310bb2c9d2f555b902dccfe7d64e79edc",
+    "rtl/core/rv32i_decoder.vhd": "c2d51b40d8ca9f98b5561e32f6cb98983003d63550d57a2f8a2f540e625d7838",
+    "rtl/core/rv32i_regfile.vhd": "2e456c67dd55b21d6d5fec9e500d23d0b1c8a69b0b6f2ab8783ebe8c0724b975",
+    "rtl/interconnect/memory_bus.vhd": "40eea7022578f95a666cb90cf3f6e24665a884e8b982be864247e9d535f57cc9",
+    "rtl/memory/data_ram.vhd": "daee647e813e6eb43d0eefbd75056b6fbd7cf3210c15a3abe6de1177e29b2acc",
+    "rtl/memory/instruction_rom.vhd": "1af4fefa1ef322de03cb53b5086a0bb6eda5af1d9da180ed040c221c11ec81d9",
+    "rtl/memory/program_image_pkg.vhd": "180fa9d26073f3d5d60905e4acc4b435c8d3dcf6366195977fe4c532c6b06290",
+    "rtl/memory/ram_byte_bank.vhd": "8fca79e6774a0ed29b6d1ea8d9113cbf33f37ac91cb335ab5064bc83513e0092",
+    "rtl/peripheral/jtag_uart_adapter.vhd": "4e6ca30e4db875bd882c2c00ea3d711c01611055ea9dde2e101f13875fed67f2",
+    "rtl/pkg/memory_map_pkg.vhd": "45dbf6a6f4feaae384b4a38725e2906a9506b7fcd1bcea4f603dd5b7c5e8024f",
+    "rtl/pkg/rv32i_pkg.vhd": "22465fe22040f610db3c7ac0d490908aaceabaa1eb89c7ff687c523147663996",
+    "scripts/simulate.py": "be1f665ddd7d7383fc5c406fd39112b5ed203018c42fbe925d72f9c2c583c530",
+    "scripts/report4_evidence.py": "65dca240210e50410ac538dfdc4ffff2bfaded086ab37bb19ac454297763315e",
+    "scripts/test_execution.py": "0da1d84cf723add2070b56c7be6a01dbe699900e09070c07b4d4c74264f85325",
+    "scripts/test_jtag_console.py": "2535d2aca14468fb3bbe80981eaaaf69ce080c37d5811ce9a2fb6bfc9009d4b9",
+    "docs/progress_reports/Progress Report 4 rschader.docx": "6e90e73ac020111ee7834656083fdb5952af775b294d250d2217395be203ea62",
+    "docs/progress_reports/Progress Report 5 rschader.docx": "bbf7f301fa30da4554962708242336456047b49c26a1209b681e3792e378a406"
+  },
+  "waveform_sha256": {
+    "goal-1-state-diagram.png": "b535d592e0b14e3756095a8908f0711ed2def2e72e09bf81744baeeb6e445a5e",
+    "goal-2-decoder-waveform.png": "491f00f563bfa46d87558cb3848d4c3509c8849ad6d9950e07195f7181168e9f",
+    "goal-2-decoder.ghw": "fdb57921cc56ea6b0ec3a1a0555f9667f0018e766eb74ed59b7a597e036c9d53",
+    "goal-2-decoder.vcd": "059d08edfb2c47a2f65dfff2f69e80d4af89d74d7a9fd0dd88daa2784f62af7a",
+    "goal-3-reset-waveform.png": "489462a2c233d34ebb33a42dfdc00709cfdd8424134259a3d3eec5cbef77dfe0",
+    "goal-3-reset.ghw": "4447454169a016a41d9bd3b592697feb0699a6ae0a37cabff6015c35a4fdf7d6",
+    "goal-3-reset.vcd": "03102e692799e0e2ef87b23a2571847fc684924424b96c5cd99066ee12048bbd"
+  }
+}

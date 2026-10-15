@@ -19,7 +19,7 @@ architecture test of tb_core is
   signal trap_cause : trap_cause_t;
   signal trap_pc, trap_tval, retire_pc, retire_instr, retire_rd_data : word_t;
   signal retire_rd : reg_index_t;
-  signal leds : std_logic_vector(15 downto 0);
+
 begin
   clk <= not clk after 5 ns;
 
@@ -39,11 +39,29 @@ begin
   bus_system : entity work.memory_bus
     port map (
       clk_i => clk, reset_i => reset,
-      i_req_i => i_req, i_addr_i => i_addr, i_rdata_o => i_rdata, i_fault_o => i_fault,
+      i_req_i => '0', i_addr_i => (others => '0'), i_rdata_o => open, i_fault_o => open,
       d_req_i => d_req, d_write_i => d_write, d_addr_i => d_addr,
       d_wdata_i => d_wdata, d_be_i => d_be, d_rdata_o => d_rdata, d_fault_o => d_fault,
-      switches_i => (others => '0'), status_i => (others => '0'), leds_o => leds
+      av_address_o => open, av_read_o => open, av_write_o => open,
+      av_writedata_o => open, av_readdata_i => x"00400000", av_waitrequest_i => '0'
     );
+
+  -- Independent four-instruction retirement test, not tied to ROM firmware.
+  process(clk)
+  begin
+    if rising_edge(clk) then
+      i_fault <= '0';
+      if i_req = '1' then
+        case i_addr is
+          when x"00000000" => i_rdata <= x"000102B7";
+          when x"00000004" => i_rdata <= x"15500313";
+          when x"00000008" => i_rdata <= x"0062A023";
+          when x"0000000C" => i_rdata <= x"0000006F";
+          when others => i_fault <= '1';
+        end case;
+      end if;
+    end if;
+  end process;
 
   process
     procedure check_retirement(constant expected_pc : word_t;
@@ -73,11 +91,9 @@ begin
     wait until rising_edge(clk);
     wait for 1 ns;
     reset <= '0';
-    check_retirement(x"00000000", x"400002B7", '1', "00101", x"40000000");
+    check_retirement(x"00000000", x"000102B7", '1', "00101", x"00010000");
     check_retirement(x"00000004", x"15500313", '1', "00110", x"00000155");
     check_retirement(x"00000008", x"0062A023", '0', "00000", (others => '0'));
-    assert leds(9 downto 0) = "0101010101"
-      report "store did not reach LED GPIO" severity failure;
     check_retirement(x"0000000C", x"0000006F", '0', "00000", (others => '0'));
     check_retirement(x"0000000C", x"0000006F", '0', "00000", (others => '0'));
     assert halted = '0' and trap_valid = '0'
@@ -86,9 +102,8 @@ begin
     reset <= '1';
     wait until rising_edge(clk);
     wait for 1 ns;
-    assert leds = x"0000" report "reset did not clear LEDs" severity failure;
     reset <= '0';
-    check_retirement(x"00000000", x"400002B7", '1', "00101", x"40000000");
+    check_retirement(x"00000000", x"000102B7", '1', "00101", x"00010000");
     report "tb_core passed" severity note;
     stop;
     wait;

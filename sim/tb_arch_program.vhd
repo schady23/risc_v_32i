@@ -41,7 +41,8 @@ begin
     clk_i=>clk, reset_i=>reset, i_req_i=>'0', i_addr_i=>x"00000000",
     i_rdata_o=>open, i_fault_o=>open, d_req_i=>dq, d_write_i=>dw,
     d_addr_i=>da, d_wdata_i=>wd, d_be_i=>be, d_rdata_o=>data,
-    d_fault_o=>dfault, switches_i=>x"0155", status_i=>x"12345678", leds_o=>open);
+    d_fault_o=>dfault, av_address_o=>open, av_read_o=>open, av_write_o=>open,
+    av_writedata_o=>open, av_readdata_i=>x"00400000", av_waitrequest_i=>'0');
   process(clk)
   begin
     if rising_edge(clk) then

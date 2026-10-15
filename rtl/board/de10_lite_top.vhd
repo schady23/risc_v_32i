@@ -2,54 +2,34 @@ library ieee;
 use ieee.std_logic_1164.all;
 use work.rv32i_pkg.all;
 
--- CPU system on the DE10-Lite. GPIO synchronizes the switch inputs.
+-- JTAG pins are dedicated device pins managed by Intel IP, not user GPIO.
 entity de10_lite_top is
-  port (
-    MAX10_CLK1_50 : in  std_logic;
-    KEY          : in  std_logic_vector(1 downto 0);
-    SW           : in  std_logic_vector(9 downto 0);
-    LEDR         : out std_logic_vector(9 downto 0)
-  );
+  port (MAX10_CLK1_50 : in std_logic; KEY : in std_logic_vector(1 downto 0));
 end entity;
-
 architecture rtl of de10_lite_top is
-  signal reset : std_logic;
-  signal i_req, i_fault : std_logic;
-  signal i_addr, i_rdata : word_t;
-  signal d_req, d_write, d_fault : std_logic;
-  signal d_addr, d_wdata, d_rdata : word_t;
-  signal d_be : byte_enable_t;
-  signal leds : std_logic_vector(15 downto 0);
-  signal switches : std_logic_vector(15 downto 0);
+  component jtag_uart_system is
+    port (
+      clk_clk, reset_reset_n : in std_logic;
+      av_address, av_chipselect, av_read_n, av_write_n : in std_logic;
+      av_writedata : in std_logic_vector(31 downto 0);
+      av_readdata : out std_logic_vector(31 downto 0);
+      av_waitrequest : out std_logic
+    );
+  end component;
+  signal reset, address, rd, wr, waitrequest : std_logic;
+  signal readdata, writedata : word_t;
 begin
-  reset_sync : entity work.reset_synchronizer
-    port map (
-      clk_i         => MAX10_CLK1_50,
-      async_reset_i => not KEY(0),
-      reset_o       => reset
-    );
-
-  cpu : entity work.rv32i_core
-    port map (
-      clk_i => MAX10_CLK1_50, reset_i => reset,
-      i_req_o => i_req, i_addr_o => i_addr, i_rdata_i => i_rdata, i_fault_i => i_fault,
-      d_req_o => d_req, d_write_o => d_write, d_addr_o => d_addr,
-      d_wdata_o => d_wdata, d_be_o => d_be, d_rdata_i => d_rdata, d_fault_i => d_fault,
-      halted_o => open, trap_valid_o => open, trap_cause_o => open,
-      trap_pc_o => open, trap_tval_o => open,
-      retire_valid_o => open, retire_pc_o => open, retire_instr_o => open,
-      retire_rd_we_o => open, retire_rd_o => open, retire_rd_data_o => open
-    );
-
-  switches <= "000000" & SW;
-  bus_system : entity work.memory_bus
-    port map (
-      clk_i => MAX10_CLK1_50, reset_i => reset,
-      i_req_i => i_req, i_addr_i => i_addr, i_rdata_o => i_rdata, i_fault_o => i_fault,
-      d_req_i => d_req, d_write_i => d_write, d_addr_i => d_addr,
-      d_wdata_i => d_wdata, d_be_i => d_be, d_rdata_o => d_rdata, d_fault_o => d_fault,
-      switches_i => switches, status_i => (others => '0'), leds_o => leds
-    );
-
-  LEDR <= leds(9 downto 0);
+  reset_sync : entity work.reset_synchronizer port map (
+    clk_i => MAX10_CLK1_50, async_reset_i => not KEY(0), reset_o => reset);
+  system_core : entity work.rv32i_system port map (
+    clk_i => MAX10_CLK1_50, reset_i => reset,
+    av_address_o => address, av_read_o => rd, av_write_o => wr,
+    av_writedata_o => writedata, av_readdata_i => readdata,
+    av_waitrequest_i => waitrequest);
+  jtag : jtag_uart_system port map (
+    clk_clk => MAX10_CLK1_50, reset_reset_n => not reset,
+    av_address => address, av_chipselect => rd or wr,
+    av_read_n => not rd, av_write_n => not wr,
+    av_writedata => writedata, av_readdata => readdata,
+    av_waitrequest => waitrequest);
 end architecture;

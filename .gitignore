@@ -24,3 +24,11 @@ software/build/
 # Python
 __pycache__/
 *.py[cod]
+
+# Local document authoring and render checks; retain the published system diagram.
+/output/*
+!/output/pdf/
+/output/pdf/*
+!/output/pdf/rv32i_system_diagram.pdf
+/tmp/
+~$*.docx

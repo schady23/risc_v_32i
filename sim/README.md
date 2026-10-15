@@ -1,50 +1,53 @@
 # Simulation and Testbenches
 
-Run `make test` from the repository root with GHDL, GNU Make, Bash, and
-`timeout` installed. The runner analyzes VHDL-2008 sources in order and runs
-all seven fixed benches and 13 generated directed programs with assertion failures enabled.
-Python 3 generates images and reference traces; the board ROM is unchanged. A failed assertion,
-compilation error, or timeout gives a nonzero exit status. Set `GHDL` to select
-a different executable.
+Run `make test`, or `python scripts/simulate.py` followed by
+`python scripts/test_jtag_console.py`. GHDL must support VHDL-2008. Set `GHDL`
+to an absolute executable path when necessary. No Quartus or physical cable is
+needed for these checks. A failed assertion, compilation, or timeout fails the run.
 
-| Testbench | Checked behavior |
+| Bench | Coverage |
 | --- | --- |
-| `tb_alu.vhd` | Representative arithmetic, comparison, and shift operations |
-| `tb_decoder.vhd` | 270,612 cases covering all 40 RV32I mnemonics, immediates, controls, reserved encodings, and unknown inputs |
-| `tb_regfile.vhd` | Register write/read and `x0` protection |
-| `tb_memory_bus.vhd` | ROM fetch/read boundaries, RAM word and byte lanes, GPIO reads/writes, rejected writes, and response timing |
-| `tb_de10_lite_top.vhd` | CPU LED demo, button reset, and program restart |
-| `tb_core.vhd` | Checked retirement trace for the built-in LED demo, GPIO store, loop, and reset |
-| `tb_core_execution.vhd` | Arithmetic, untaken branch, jump, RAM load/store, and directed traps |
+| `tb_alu` | Arithmetic, comparisons and shifts |
+| `tb_decoder` | 270,612 legal/reserved/unknown-input cases for all 40 RV32I instructions |
+| `tb_decoder_focused` | Seven readable decoder cases: ADDI/LW/SW/BEQ/JAL, illegal input and NOP recovery |
+| `tb_regfile` | Write/read, reset and x0 protection |
+| `tb_jtag_uart` | Fixed-latency MMIO, invalid accesses, stalled Avalon signal stability, exact TX byte ordering, full TX FIFO backpressure without starving RX, reset |
+| `tb_memory_bus` | ROM fetch/data, RAM byte lanes/boundaries, instruction fetch from RAM, collision suppression, MMIO routing and response timing |
+| `tb_de10_lite_top` | Actual ROM loader + CPU + RAM + adapter: upload/CRC, invalid sizes, execution from RAM, initialized data, BSS clearing, ABI return/re-run, failed replacement, reset during upload |
+| `tb_core` | Independent four-instruction retirement trace, RAM store, loop, reset |
+| `tb_core_execution` | Execution paths and directed architectural traps |
+| `tb_core_reset` | Reset before/after store acceptance and pending writeback; request suppression, PC zero, register clearing and RAM persistence |
 
-The built-in program in `rtl/memory/program_image_pkg.vhd` writes `0x155` to
-the LED register and loops. The `make image` target replaces it with assembled
-software, so some expected values in these tests must be updated if that image
-is committed.
+The board test binds `sim/jtag_uart_system.vhd` to the board wrapper's generated
+IP component. This is an Avalon/FIFO model with 64-byte queues and injected
+waitrequest stalls. Host signals live in `jtag_uart_sim_pkg`. Neither simulation
+file is included in the Quartus project. The model tests the CPU-facing path,
+not the Intel JTAG scan protocol, native library, clock-domain crossing or hardware.
 
-The current suite does not cover every RV32I execution combination. Remaining tests should cover reset from every core state, negative branch
-offsets, broader immediate ALU execution, and longer mixed programs.
-The directed assembly files in `sim/programs/` are starting points; an
-automated assembly and result-checking pipeline is still needed. Architectural
-tests and physical FPGA validation are separate milestones.
+The checked-in `sim/images/hello.hex` fixture is generated from `hello.S` with
+the application startup/linker. `make app` regenerates it. Normal simulation
+does not require a cross compiler. The fixture's entry wrapper and application
+exercise both code/data access from executable RAM and return to the loader.
 
-## Expanded execution checks
+The 13 generated directed programs compare independent expected retirement
+traces, destination values, traps, request counts and reset recovery. Coverage
+includes all load/store widths and lanes, signed extension, x0 side effects,
+ALU/shift boundaries, branches/JALR, alignment, ROM writes, and rejected MMIO.
 
-`test_execution.py` generates independent instruction words and expected
-retirements for `tb_program.vhd`. All 13 programs check PC, instruction, write
-enable, destination, and result; traps check cause, PC, tval, absence of later
-retirement/requests, and reset recovery. Data requests go through the real bus.
+Five host tests cover padding/CRC, fragmented responses, maximum 12 KiB image,
+32-byte credit pacing, rejected CRC, no-image error, invalid sizes and timeouts.
+They use an independent protocol peer; native USB-Blaster communication is not
+claimed. The board bench separately exercises the actual C loader and RV32I machine code.
 
-Coverage includes every load/store width; all four byte lanes and both halfword
-lanes; signed/unsigned extension; preservation of unselected store lanes;
-loads and writes to x0; all ten register ALU operations at boundary values;
-shift amounts 0, 1, 31 and register masking at 32; AUIPC; FENCE; each branch
-condition taken and untaken (including unused misaligned targets); successful
-JALR masking/link writeback; misaligned halfword/word accesses; faulting loads
-to x0; ROM writes; unsupported GPIO widths and read-only GPIO stores.
-The existing execution bench additionally covers JAL, ECALL, EBREAK, illegal
-instructions, fetch faults, and misaligned jump/taken-branch targets.
+`make test-adapter` additionally checks local architectural pass/fail/trap/timeout
+paths. It uses LLVM by default or GNU tools with exported `RISCV_PREFIX`.
+No upstream architectural certification suite has run. Remaining CPU work
+includes broader mixed programs and reset coverage across every core state.
 
-Run `make test-adapter` for the LLVM-assembled local architectural adapter
-self-test. It checks the success, failure, trap, and timeout paths; no upstream
-certification tests have run. See [adapter status](arch-test/README.md).
+`python scripts/report4_evidence.py` repeats the regression and host checks and
+saves focused GHW/VCD traces, assertion transcripts and PNG waveforms under
+`docs/progress_reports/evidence`. Pillow is needed only for the PNG renderer.
+The GHW files preserve VHDL enumeration/record types; the decoder VCD exposes
+enum-position aliases (`kind_code`, `size_code`, etc.) in package declaration
+order. The PNG labels translate those actual trace values. See
+`docs/progress_reports/evidence/report-4-completion.md` for waveform explanations.

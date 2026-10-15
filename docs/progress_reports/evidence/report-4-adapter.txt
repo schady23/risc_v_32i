@@ -1,0 +1,7 @@
+Adapter pass path checked
+Adapter fail path checked
+Adapter trap path checked
+Adapter timeout path checked
+Architectural adapter self-test passed (not upstream certification)
+
+Exit status: 0

@@ -1,0 +1,12 @@
+$ C:\Users\schad\opencode_projects\risc_v_32i/build/tools/ghdl/bin/ghdl.exe --elab-run --std=08 --workdir=build/ghdl tb_decoder_focused --assert-level=error --wave=C:\Users\schad\opencode_projects\risc_v_32i\docs\progress_reports\evidence\goal-2-decoder.ghw --vcd=C:\Users\schad\opencode_projects\risc_v_32i\docs\progress_reports\evidence\goal-2-decoder.vcd
+sim/tb_decoder_focused.vhd:56:7:@1ns:(report note): ADDI x1,x0,-1 instr=FFF00093 imm=FFFFFFFF kind=instr_alu rd_write='1' size=mem_word
+sim/tb_decoder_focused.vhd:56:7:@11ns:(report note): LW x2,12(x1) instr=00C0A103 imm=0000000C kind=instr_load rd_write='1' size=mem_word
+sim/tb_decoder_focused.vhd:56:7:@21ns:(report note): SW x2,-4(x1) instr=FE20AE23 imm=FFFFFFFC kind=instr_store rd_write='0' size=mem_word
+sim/tb_decoder_focused.vhd:56:7:@31ns:(report note): BEQ x1,x2,8 instr=00208463 imm=00000008 kind=instr_branch rd_write='0' size=mem_word
+sim/tb_decoder_focused.vhd:56:7:@41ns:(report note): JAL x3,16 instr=010001EF imm=00000010 kind=instr_jal rd_write='1' size=mem_word
+sim/tb_decoder_focused.vhd:56:7:@51ns:(report note): Illegal encoding instr=FFFFFFFF imm=00000000 kind=instr_illegal rd_write='0' size=mem_word
+sim/tb_decoder_focused.vhd:56:7:@61ns:(report note): NOP recovery instr=00000013 imm=00000000 kind=instr_alu rd_write='1' size=mem_word
+sim/tb_decoder_focused.vhd:79:5:@70ns:(report note): tb_decoder_focused passed: 7 cases
+simulation stopped @70ns
+
+Exit status: 0

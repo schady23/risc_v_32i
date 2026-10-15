@@ -1,114 +1,120 @@
 # RV32I CPU for the DE10-Lite
 
-A VHDL-2008 implementation of a non-pipelined, multi-cycle RV32I CPU targeting
-the Terasic DE10-Lite. The board uses a MAX 10 `10M50DAF484C7G` FPGA; see
-[Terasic's board specifications](https://www.terasic.com.tw/cgi-bin/page/archive.pl?CategoryNo=218&Language=English&No=1021&PartNo=2).
+A non-pipelined, multi-cycle VHDL-2008 RV32I CPU for the Terasic DE10-Lite's
+MAX 10 `10M50DAF484C7G`. All software I/O uses **JTAG UART through the existing
+USB-Blaster**. No serial adapter, GPIO wiring, COM port, or baud setting is used.
 
-The multi-cycle core, memory bus, and GPIO are connected to the DE10-Lite top
-level. The checked-in ROM contains a four-instruction demo that writes
-`0x155` to the ten LEDs and loops. Simulation and the integrated Quartus build pass, including 50 MHz timing
-checks. Physical board validation remains pending; no JTAG hardware was detected.
+The ROM boots a program loader. Assemble a program on your computer, upload
+it into executable RAM, and run it without rebuilding the FPGA configuration.
+Programs can print through JTAG UART and return to the loader.
 
-## Documentation
+## Quick start
 
-- [Architecture contract](docs/architecture.md): ISA, memory timing, address map,
-  reset, traps, retirement, and the DE10-Lite integration contract.
-- [DE10-Lite bring-up](docs/bringup.md): hardware/tool requirements, build
-  commands, programming instructions, and validation results.
-- [Simulation and testbenches](sim/README.md): runnable GHDL commands, current
-  coverage, and verification milestones.
-- [Architectural tests](sim/arch-test/README.md): local binary adapter and remaining upstream integration.
+With GHDL, Python 3, a bare-metal RISC-V GCC toolchain, and Quartus Prime
+Lite/Standard with MAX 10 and Platform Designer support:
 
-## Current implementation
+```sh
+make test       # CPU, bus, JTAG adapter, loader integration, and host protocol
+make image      # Rebuild ROM loader (the generated ROM is also checked in)
+make app        # Build the uploadable hello assembly example
+make build      # Generate Intel JTAG UART IP, compile FPGA, check timing
+make program    # Program the fresh .sof through USB-Blaster
+python -m pip install -r software/requirements.txt
+python scripts/jtag_console.py upload software/build/hello.bin --run
+```
 
-| Component | Status |
-| --- | --- |
-| Shared packages | Types, ALU operations, core states, trap codes, and memory map defined |
-| ALU | All ten operations implemented; boundary execution checks pass |
-| Register file | Two read ports, synchronous write/reset, and protected `x0` implemented |
-| Decoder | All 40 RV32I instructions decoded; legality, immediates, and typed execution controls tested |
-| Core | Multi-cycle execution, retirement trace, alignment/access traps, and halt on fault implemented |
-| ROM, RAM, memory bus, GPIO | Synchronous implementations with directed access and byte-lane checks |
-| Board support | CPU system top level, pin/timing constraints, Quartus build and JTAG scripts |
-| Simulation | Seven fixed benches plus 13 directed programs; 270,612 decoder cases |
-
-## Repository layout
+Expected application output:
 
 ```text
-constraints/  DE10-Lite pin assignments and 50 MHz timing constraints
-docs/         Architecture and DE10-Lite bring-up documentation
-rtl/pkg/      Shared CPU types/constants and memory map
-rtl/core/     ALU, register file, decoder, and multi-cycle core
-rtl/memory/   Program image, instruction ROM, and data RAM
-rtl/interconnect/  Fixed-latency memory bus
-rtl/peripheral/    Memory-mapped GPIO
-rtl/board/    Reset synchronizer and DE10-Lite CPU wrapper
-scripts/      Quartus build/programming, GHDL runner, and image converter
-sim/          Testbenches, directed assembly programs, and test documentation
-software/     Linker script, startup code, smoke program, and Makefile
+RUN
+Hello from uploaded RV32I assembly!
+EXIT 0000002A
+ready>
 ```
 
-## Development workflow
+Subsequent program changes require only assembly and upload. Use
+`python scripts/jtag_console.py console` for a line-oriented console, or
+`python scripts/jtag_console.py run` to run the loaded image again. Close other
+JTAG UART terminals first. Press `KEY(0)` if a program traps, hangs, or an upload
+is interrupted. Reset returns to the loader and requires a new upload.
 
-From the repository root:
+See [JTAG UART and loader setup](docs/uart.md) for host libraries, cable selection,
+assembly conventions, transfer details, recovery, and the memory map.
+
+## Tools without Make
 
 ```sh
-make test       # Run seven fixed benches and 13 directed programs
-make build      # Generate the Quartus project, compile, and check timing
-make test-adapter # Check local adapter pass/fail/trap/timeout paths (LLVM required)
+python scripts/build_software.py --prefix riscv64-unknown-elf-
+python scripts/build_app.py software/hello.S --test-image sim/images/hello.hex
+python scripts/simulate.py
+python scripts/test_jtag_console.py
+quartus_sh -t scripts/build.tcl
+quartus_sh -t scripts/program.tcl
 ```
 
-Use Quartus Prime Lite or Standard with MAX 10 support installed; see the
-[Quartus edition comparison](https://www.intel.com/content/www/us/en/products/details/fpga/development-tools/quartus-prime/resource.html).
-The build creates `build/quartus/risc_v_32i.qpf` and
-`build/quartus/output_files/risc_v_32i.sof`. Timing and utilization reports are
-written under `build/reports/`. The integrated CPU build passed with Quartus
-Prime Lite 25.1 on September 30, 2026 (985 logic elements, 20 M9Ks).
-See [validation results](docs/bringup.md#validation-results).
+The compiler prefix can include a full directory. Export `RISCV_PREFIX` to use
+a different prefix throughout the Python tools; set `GHDL` to select an
+executable not on PATH. `make image`/`make app` use the Python build tools, so
+the same commands work on Windows. On Windows `PYTHON=python` can override
+Make's default `python3`.
 
-With a DE10-Lite connected, use the [JTAG instructions](docs/bringup.md#configure-the-board-through-jtag)
-to select the cable and run `make program`. The checked-in CPU demo writes
-`0x155` to the LEDs and restarts when `KEY(0)` is pressed. Switch inputs are
-available through memory-mapped GPIO.
+The Python JTAG helper uses the MIT-licensed `intel-jtag-uart` binding and the
+Quartus `jtag_atlantic` / `jtag_client` libraries. Specify
+`--quartus-root C:/path/to/quartus` before the subcommand when necessary.
 
-`make project` generates the project without compiling; `make timing` rechecks
-an existing compilation. Project settings are generated from tracked scripts,
-so edit those scripts rather than the generated QSF. All testbenches live in
-[`sim/`](sim/README.md).
+## Memory and I/O
 
-## Software image
+| Range/address | Use |
+| --- | --- |
+| `0x00000000`-`0x00003FFF` | 16 KiB ROM: loader, startup and constants |
+| `0x00010000`-`0x00012FFF` | 12 KiB application code/data/BSS |
+| `0x00013000`-`0x00013BFF` | 3 KiB application stack |
+| `0x00013C00`-`0x00013FFF` | 1 KiB loader workspace/stack |
+| `0x40000000` | TX staging byte, `SW` only |
+| `0x40000004` | RX staging byte, `LW` only; consumes byte |
+| `0x40000008` | Status, `LW` only: TX-ready bit 0, RX-ready bit 1, TX-pending bit 2 |
 
-From the repository root, with GNU Make, Python 3, and a bare-metal GNU RISC-V
-toolchain installed:
+RAM supports both instruction fetch and data accesses through its existing
+single port. This multi-cycle CPU never needs them simultaneously. UART MMIO
+remains a fixed one-cycle response; staging buffers handle Intel IP's variable
+Avalon waitrequest without changing the CPU's bus protocol.
 
-```sh
-make -C software
-python3 scripts/elf_to_vhdl.py software/build/smoke.bin \
-  rtl/memory/program_image_pkg.vhd
-```
+The memory regions are software conventions, without hardware protection.
+Application startup preserves the loader's ABI state, switches stacks, clears
+BSS, calls `main`, and restores loader state when `main` returns. Initialized
+application data is included directly in the uploaded RAM image.
 
-Override the toolchain prefix when necessary:
+## Verification status
 
-```sh
-make -C software RISCV_PREFIX=riscv32-unknown-elf-
-```
+- Ten fixed GHDL benches and 13 directed programs pass, including 270,612
+  decoder cases and CPU/ROM/RAM/adapter upload/run/CRC/return/reset integration.
+- Five host uploader tests pass, including a maximum-size image, chunk credits,
+  fragmented responses, CRC rejection, and timeout handling.
+- The local architectural adapter's pass/fail/trap/timeout checks pass using GNU
+  tools. Upstream architectural certification remains pending.
+- GHDL synthesis accepts `rv32i_system` (the vendor-independent system).
+- Intel IP generation, Quartus fit/timing, native host library communication,
+  and physical USB-Blaster operation have **not** been verified here. The GHDL
+  model represents the Intel IP's Avalon/FIFO interface, not the JTAG pins.
 
-The Makefile targets `-march=rv32i -mabi=ilp32`; its default prefix is
-`riscv64-unknown-elf-`. Despite its filename, `elf_to_vhdl.py` accepts a flat
-little-endian binary, not an ELF file. It replaces the checked-in program-image
-package, pads the last word, and rejects images larger than 16 KiB. Recompile
-simulation or FPGA sources after generating a new image.
+See the [JTAG verification record](docs/validation/2026-10-14-jtag/README.md)
+and the [October 15 decoder/reset evidence](docs/progress_reports/evidence/report-4-completion.md).
+The archived September GPIO and earlier October physical-UART results describe
+previous designs; their utilization, timing and SOF files do not validate this one.
 
-The board integration preserves the ROM/RAM addresses and GPIO register
-addresses. The CPU displays the low ten LED-register bits. The current startup
-sets the stack and clears `.bss`, but does not copy initialized `.data` from ROM
-to RAM; add that support before relying on initialized writable variables.
-`make image` replaces the checked-in demo with the assembled software image;
-rebuild the simulation and FPGA project afterward.
+## Documentation and source layout
 
-## Next milestones
+- [Architecture contract](docs/architecture.md): ISA, state machine, memory timing,
+  instruction/data routing, MMIO and traps.
+- [Board bring-up](docs/bringup.md): generated IP, constraints, compilation and programming.
+- [JTAG UART and loader](docs/uart.md): upload and application workflow.
+- [Simulation](sim/README.md) and [architectural adapter](sim/arch-test/README.md).
+- [Progress Report 4](<docs/progress_reports/Progress Report 4 rschader.docx>) and
+  [Progress Report 5](<docs/progress_reports/Progress Report 5 rschader.docx>):
+  architecture review, decoder/reset waveforms and updated schedules.
 
-1. Program a DE10-Lite and verify the LED demo and reset behavior.
-2. Extend mixed-program tests and reset coverage across every core state.
-3. Complete shared image loading, initialized data, and ACT4 platform inputs.
-4. Run compatible upstream architectural tests and document results/exclusions.
+`rtl/core/` contains the CPU; `rtl/memory/` contains ROM and RAM;
+`rtl/interconnect/` routes requests; `rtl/peripheral/` contains the JTAG adapter;
+`rtl/board/` contains the system and board wrappers. Intel IP is generated under
+the ignored `build/ip/` directory. `software/` contains the ROM loader and
+uploadable example. `scripts/` contains build, upload, verification and diagram tools.

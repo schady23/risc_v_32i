@@ -1,0 +1,12 @@
+$ C:\Users\schad\opencode_projects\risc_v_32i/build/tools/ghdl/bin/ghdl.exe --elab-run --std=08 --workdir=build/ghdl tb_core_reset --assert-level=error --wave=C:\Users\schad\opencode_projects\risc_v_32i\docs\progress_reports\evidence\goal-3-reset.ghw --vcd=C:\Users\schad\opencode_projects\risc_v_32i\docs\progress_reports\evidence\goal-3-reset.vcd
+../../src/ieee2008/numeric_std-body.vhdl:3053:7:@0ms:(assertion warning): NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+../../src/ieee2008/numeric_std-body.vhdl:3053:7:@0ms:(assertion warning): NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+../../src/ieee2008/numeric_std-body.vhdl:1641:7:@0ms:(assertion warning): NUMERIC_STD.">=": metavalue detected, returning FALSE
+../../src/ieee2008/numeric_std-body.vhdl:3053:7:@0ms:(assertion warning): NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+sim/tb_core_reset.vhd:137:5:@525ns:(report note): pre-acceptance store canceled; RAM unchanged; register file cleared
+sim/tb_core_reset.vhd:146:5:@815ns:(report note): accepted store preserved across reset; restart load returned 0x55
+sim/tb_core_reset.vhd:154:5:@1165ns:(report note): pending register write/retirement suppressed; restart verified
+sim/tb_core_reset.vhd:156:5:@1165ns:(report note): tb_core_reset passed: 3 injected resets, request gating, RAM persistence, register reset, PC zero
+simulation stopped @1165ns
+
+Exit status: 0

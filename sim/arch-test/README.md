@@ -14,11 +14,16 @@ flow, not a replacement for those inputs.
 
 ## Local completion contract
 
+The adapter self-test uses LLVM by default. An exported `RISCV_PREFIX` selects
+GNU GCC/objcopy instead (for example `riscv64-unknown-elf-`, optionally with an
+absolute tool directory). Run `python scripts/simulate.py` first to analyze
+the benches, then `python scripts/test_arch_adapter.py`.
+
 - Code starts at zero in a 16 KiB ROM image. Data accesses use the real memory
-  bus, RAM, and GPIO. Each simulation starts with zero-initialized RAM.
+  bus, RAM, and UART. Each simulation starts with zero-initialized RAM.
 - Reserve RAM word `0x00013FFC` for completion. An accepted aligned `SW` of
   `1` passes; any other value fails. It is ordinary RAM observed by the
-  simulator, not a new MMIO register. The status MMIO register remains read-only.
+  simulator, not a new MMIO register. JTAG UART staging status is read-only.
 - Unexpected traps, byte/halfword completion stores, bus faults, a cycle limit,
   and a 30-second wall-clock limit fail. A loop without completion cannot pass.
 - `linker.ld` reserves the completion word and rejects initialized `.data`;

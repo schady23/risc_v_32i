@@ -1,0 +1,3 @@
+software/build/loader.bin: 890 bytes, SHA256 77afb20087000bab0f110a8e5f743ab0ae86034ba4727467186a10fb4b95366a
+software/build/hello.bin: 328 bytes, SHA256 74f6b01622bb7e177c85fe9fca7c1c7c317431bceb0c4e3776f664253c9f3979
+sim/images/hello.hex: 820 bytes, SHA256 4fb27be8d86304d956ee75794ea7eb67506464c5035b0361640df9b0b44d99de

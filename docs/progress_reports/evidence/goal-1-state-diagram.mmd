@@ -1,0 +1,30 @@
+stateDiagram-v2
+    direction LR
+    [*] --> Fetch: Reset PC = 0x00000000
+    state "Instruction fetch" as Fetch {
+        FETCH_REQ --> FETCH_WAIT: One-cycle memory response
+    }
+    Fetch --> Decode: Instruction received
+    state "Decode" as Decode
+    state "Execute" as Execute
+    state "Writeback" as Writeback
+    state "Halt" as Halt
+    Decode --> Execute
+    Execute --> Writeback: Other successful instructions
+    Execute --> Memory: Load / store
+    state "Memory access" as Memory {
+        MEM_READ_REQ --> MEM_READ_WAIT: One-cycle data / fault response
+        MEM_WRITE_REQ --> MEM_WRITE_WAIT: One-cycle fault response
+    }
+    Memory --> Writeback: Success
+    Writeback --> Fetch: Commit PC / optional rd; retire
+    Fetch --> Halt: Fetch fault
+    Execute --> Halt: Execution trap
+    Memory --> Halt: Access fault
+    Halt --> Halt: Until reset
+    Halt --> Fetch: Reset PC = 0x00000000
+    note right of Memory
+        Request accepted at edge N.
+        Core consumes response at edge N+1.
+        Valid stores commit at edge N.
+    end note

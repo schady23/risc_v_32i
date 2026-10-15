@@ -4,18 +4,20 @@ QUARTUS_STA ?= quartus_sta
 PYTHON ?= python3
 CABLE ?= USB-Blaster
 
-.PHONY: help test project build timing program software image test-adapter
+.PHONY: help test project build timing program software image app test-adapter
 
 help:
-	@echo "make test      Run seven GHDL benches and 13 directed programs"
+	@echo "make test      Run CPU, JTAG loader, memory, and upload-client checks"
 	@echo "make project   Generate the DE10-Lite Quartus project"
 	@echo "make build     Compile the CPU system and check timing"
 	@echo "make timing    Recheck timing for an existing compilation"
 	@echo "make program   Configure the board with the existing .sof"
-	@echo "make image     Build software and regenerate the ROM package"
+	@echo "make image     Build the ROM loader and regenerate its VHDL image"
+	@echo "make app       Build the uploadable hello assembly example"
 
 test:
-	bash scripts/simulate.sh
+	$(PYTHON) scripts/simulate.py
+	$(PYTHON) scripts/test_jtag_console.py
 
 project:
 	$(QUARTUS_SH) -t scripts/create_project.tcl
@@ -30,11 +32,13 @@ program:
 	$(QUARTUS_SH) -t scripts/program.tcl "$(CABLE)"
 
 software:
-	$(MAKE) -C software
+	$(PYTHON) scripts/build_software.py
 
 image: software
-	$(PYTHON) scripts/elf_to_vhdl.py software/build/smoke.bin rtl/memory/program_image_pkg.vhd
 
-# Analyze benches with make test first; this target also needs LLVM tools.
+app:
+	$(PYTHON) scripts/build_app.py software/hello.S --test-image sim/images/hello.hex
+
+# Analyze benches first. Uses LLVM, or GNU tools when RISCV_PREFIX is exported.
 test-adapter: test
 	$(PYTHON) scripts/test_arch_adapter.py

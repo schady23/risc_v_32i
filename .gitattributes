@@ -1,0 +1,5 @@
+# Preserve artifact bytes on Windows; PDF syntax must not undergo CRLF conversion.
+*.pdf binary
+*.docx binary
+*.ghw binary
+*.png binary
