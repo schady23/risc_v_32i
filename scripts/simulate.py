@@ -25,7 +25,7 @@ def main():
     ]
     benches = ['tb_alu', 'tb_decoder', 'tb_decoder_focused', 'tb_regfile',
                'tb_jtag_uart', 'tb_memory_bus', 'tb_de10_lite_top', 'tb_core',
-               'tb_core_execution', 'tb_core_reset']
+               'tb_core_execution', 'tb_core_reset', 'tb_core_reset_extended']
     sources += [f'sim/{name}.vhd' for name in benches + ['tb_arch_program', 'tb_program']]
     subprocess.run([ghdl, '-a', '--std=08', '--workdir=build/ghdl', *sources],
                    cwd=ROOT, check=True, timeout=60)

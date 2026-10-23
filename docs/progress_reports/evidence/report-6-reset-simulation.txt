@@ -1,0 +1,13 @@
+$ C:\Users\schad\opencode_projects\risc_v_32i/build/tools/ghdl/bin/ghdl.exe --elab-run --std=08 --workdir=build/ghdl tb_core_reset_extended --assert-level=error --wave=C:\Users\schad\opencode_projects\risc_v_32i\docs\progress_reports\evidence/report-6-reset.ghw --vcd=C:\Users\schad\opencode_projects\risc_v_32i\docs\progress_reports\evidence/report-6-reset.vcd
+../../src/ieee2008/numeric_std-body.vhdl:3053:7:@0ms:(assertion warning): NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+../../src/ieee2008/numeric_std-body.vhdl:3053:7:@0ms:(assertion warning): NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+../../src/ieee2008/numeric_std-body.vhdl:1641:7:@0ms:(assertion warning): NUMERIC_STD.">=": metavalue detected, returning FALSE
+../../src/ieee2008/numeric_std-body.vhdl:3053:7:@0ms:(assertion warning): NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+sim/tb_core_reset_extended.vhd:116:5:@555ns:(report note): fetch request reset passed: request canceled, PC zero, x8 cleared
+sim/tb_core_reset_extended.vhd:124:5:@875ns:(report note): fetch response reset passed: stale instruction discarded
+sim/tb_core_reset_extended.vhd:131:5:@1495ns:(report note): load request reset passed: no canceled load writeback
+sim/tb_core_reset_extended.vhd:140:5:@2125ns:(report note): load response reset passed: pending data discarded, no writeback
+sim/tb_core_reset_extended.vhd:143:5:@2195ns:(report note): tb_core_reset_extended passed: 4 injected resets at fetch/load boundaries
+simulation stopped @2195ns
+
+Exit status: 0

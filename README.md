@@ -86,7 +86,7 @@ application data is included directly in the uploaded RAM image.
 
 ## Verification status
 
-- Ten fixed GHDL benches and 13 directed programs pass, including 270,612
+- Eleven fixed GHDL benches and 14 directed programs pass, including 270,612
   decoder cases and CPU/ROM/RAM/adapter upload/run/CRC/return/reset integration.
 - Five host uploader tests pass, including a maximum-size image, chunk credits,
   fragmented responses, CRC rejection, and timeout handling.
@@ -99,11 +99,15 @@ application data is included directly in the uploaded RAM image.
 
 See the [JTAG verification record](docs/validation/2026-10-14-jtag/README.md)
 and the [October 15 decoder/reset evidence](docs/progress_reports/evidence/report-4-completion.md).
+The [October 23 reset and mixed-program evidence](docs/progress_reports/evidence/report-6-completion.md)
+adds four fetch/load reset cases and a five-iteration RAM loop with final readback.
 The archived September GPIO and earlier October physical-UART results describe
 previous designs; their utilization, timing and SOF files do not validate this one.
 
 ## Documentation and source layout
 
+- [Illustrated user guide](docs/user_guide/rv32i_user_guide.docx): Windows setup,
+  equipment and safety, simulation, FPGA programming, application upload and troubleshooting.
 - [Architecture contract](docs/architecture.md): ISA, state machine, memory timing,
   instruction/data routing, MMIO and traps.
 - [Board bring-up](docs/bringup.md): generated IP, constraints, compilation and programming.
@@ -112,6 +116,9 @@ previous designs; their utilization, timing and SOF files do not validate this o
 - [Progress Report 4](<docs/progress_reports/Progress Report 4 rschader.docx>) and
   [Progress Report 5](<docs/progress_reports/Progress Report 5 rschader.docx>):
   architecture review, decoder/reset waveforms and updated schedules.
+- [Progress Report 6](<docs/progress_reports/Progress Report 6 rschader.docx>):
+  extended reset and mixed-program results, the current Quartus blocker, and
+  new build, DE10-Lite test and uploaded-application goals.
 
 `rtl/core/` contains the CPU; `rtl/memory/` contains ROM and RAM;
 `rtl/interconnect/` routes requests; `rtl/peripheral/` contains the JTAG adapter;

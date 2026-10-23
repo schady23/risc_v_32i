@@ -1,0 +1,8 @@
+$ C:\Users\schad\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe scripts/test_jtag_console.py
+.....
+----------------------------------------------------------------------
+Ran 5 tests in 0.797s
+
+OK
+
+Exit status: 0

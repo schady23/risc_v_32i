@@ -1,0 +1,27 @@
+[
+  {
+    "time_ns": 405.0,
+    "address": "00010000",
+    "value": 1
+  },
+  {
+    "time_ns": 745.0,
+    "address": "00010004",
+    "value": 3
+  },
+  {
+    "time_ns": 1085.0,
+    "address": "00010008",
+    "value": 6
+  },
+  {
+    "time_ns": 1425.0,
+    "address": "0001000C",
+    "value": 10
+  },
+  {
+    "time_ns": 1765.0,
+    "address": "00010010",
+    "value": 15
+  }
+]

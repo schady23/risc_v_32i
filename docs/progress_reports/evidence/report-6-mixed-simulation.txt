@@ -1,0 +1,9 @@
+$ C:\Users\schad\opencode_projects\risc_v_32i/build/tools/ghdl/bin/ghdl.exe --elab-run --std=08 --workdir=build/ghdl tb_program -gIMAGE_FILE=C:\Users\schad\opencode_projects\risc_v_32i/build/execution/mixed_ram_loop.hex -gTRACE_FILE=C:\Users\schad\opencode_projects\risc_v_32i/build/execution/mixed_ram_loop.trace -gEXPECT_CAUSE=3 -gEXPECT_PC=68 -gEXPECT_TVAL=0 -gEXPECT_REQUESTS=15 --assert-level=error --wave=C:\Users\schad\opencode_projects\risc_v_32i\docs\progress_reports\evidence/report-6-mixed.ghw --vcd=C:\Users\schad\opencode_projects\risc_v_32i\docs\progress_reports\evidence/report-6-mixed.vcd
+../../src/ieee2008/numeric_std-body.vhdl:3053:7:@0ms:(assertion warning): NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+../../src/ieee2008/numeric_std-body.vhdl:3053:7:@0ms:(assertion warning): NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+../../src/ieee2008/numeric_std-body.vhdl:1641:7:@0ms:(assertion warning): NUMERIC_STD.">=": metavalue detected, returning FALSE
+../../src/ieee2008/numeric_std-body.vhdl:3053:7:@0ms:(assertion warning): NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+sim/tb_program.vhd:97:9:@2456ns:(report note): tb_program passed: C:\Users\schad\opencode_projects\risc_v_32i/build/execution/mixed_ram_loop.hex, retirements=41
+simulation stopped @2456ns
+
+Exit status: 0

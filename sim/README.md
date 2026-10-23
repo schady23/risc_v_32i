@@ -17,6 +17,7 @@ needed for these checks. A failed assertion, compilation, or timeout fails the r
 | `tb_core` | Independent four-instruction retirement trace, RAM store, loop, reset |
 | `tb_core_execution` | Execution paths and directed architectural traps |
 | `tb_core_reset` | Reset before/after store acceptance and pending writeback; request suppression, PC zero, register clearing and RAM persistence |
+| `tb_core_reset_extended` | Four resets at fetch/load request and response boundaries; canceled load suppression, PC zero and clearing a previously nonzero x8 |
 
 The board test binds `sim/jtag_uart_system.vhd` to the board wrapper's generated
 IP component. This is an Avalon/FIFO model with 64-byte queues and injected
@@ -29,10 +30,12 @@ the application startup/linker. `make app` regenerates it. Normal simulation
 does not require a cross compiler. The fixture's entry wrapper and application
 exercise both code/data access from executable RAM and return to the loader.
 
-The 13 generated directed programs compare independent expected retirement
+The 14 generated directed programs compare independent expected retirement
 traces, destination values, traps, request counts and reset recovery. Coverage
 includes all load/store widths and lanes, signed extension, x0 side effects,
 ALU/shift boundaries, branches/JALR, alignment, ROM writes, and rejected MMIO.
+The mixed RAM loop adds five iterations of arithmetic, a backward BNE, stores
+and loads, checking 41 retirements, 15 data requests and final words 1/3/6/10/15.
 
 Five host tests cover padding/CRC, fragmented responses, maximum 12 KiB image,
 32-byte credit pacing, rejected CRC, no-image error, invalid sizes and timeouts.
@@ -42,7 +45,7 @@ claimed. The board bench separately exercises the actual C loader and RV32I mach
 `make test-adapter` additionally checks local architectural pass/fail/trap/timeout
 paths. It uses LLVM by default or GNU tools with exported `RISCV_PREFIX`.
 No upstream architectural certification suite has run. Remaining CPU work
-includes broader mixed programs and reset coverage across every core state.
+includes broader uploaded mixed programs and reset coverage across every core state.
 
 `python scripts/report4_evidence.py` repeats the regression and host checks and
 saves focused GHW/VCD traces, assertion transcripts and PNG waveforms under
@@ -51,3 +54,10 @@ The GHW files preserve VHDL enumeration/record types; the decoder VCD exposes
 enum-position aliases (`kind_code`, `size_code`, etc.) in package declaration
 order. The PNG labels translate those actual trace values. See
 `docs/progress_reports/evidence/report-4-completion.md` for waveform explanations.
+
+`python scripts/report6_evidence.py` saves the extended reset and mixed-loop
+GHW/VCD traces, independent program image/reference trace, measured store
+results, waveform PNGs, regression/host/adapter logs and Quartus tool preflight.
+It requires GHDL, Pillow and a RISC-V compiler for the adapter self-test;
+set `GHDL` and `RISCV_PREFIX` when those tools are not on PATH.
+See `docs/progress_reports/evidence/report-6-completion.md` for the dated results.

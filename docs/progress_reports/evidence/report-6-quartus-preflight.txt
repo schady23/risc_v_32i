@@ -1,0 +1,4 @@
+$ quartus_sh --version
+[WinError 2] The system cannot find the file specified
+
+Exit status: 127

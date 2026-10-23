@@ -122,4 +122,33 @@ for name,address,f3,write in [('load_x0_fault',0x20000,2,False),('rom_store',0,2
     p=Program(); p.li(1,address); p.requests=1
     terminal=store(f3,2,0) if write else imm(3,0,f3,1,0)
     p.finish(name,7 if write else 5,address,terminal)
-print('Directed execution suite passed: 13 programs')
+# Mixed loop: sum 1..5 in RAM, store each intermediate sum, then check all
+# five final words through loads. Expected values are fixed independent values.
+p = Program()
+p.li(1, 0x10000)
+p.emit(imm(0x13,2,0,0,1),2,1)  # counter
+p.emit(imm(0x13,3,0,0,6),3,6)  # exclusive limit
+p.emit(imm(0x13,4,0,0,0),4,0)  # sum
+p.emit(imm(0x13,5,0,1,0),5,0x10000)  # output pointer
+loop_pc = len(p.words)*4
+loop_words = [
+    (2<<20)|(4<<15)|(4<<7)|0x33,                # ADD x4,x4,x2
+    (4<<20)|(5<<15)|(2<<12)|0x23,              # SW x4,0(x5)
+    imm(3,6,2,5,0),                            # LW x6,0(x5)
+    imm(0x13,5,0,5,4),                         # ADDI x5,x5,4
+    imm(0x13,2,0,2,1),                         # ADDI x2,x2,1
+    branch(1,2,3,-20),                         # BNE x2,x3,loop
+]
+p.words.extend(loop_words)
+for iteration,total in enumerate([1,3,6,10,15],1):
+    values = [(4,total),(0,0),(6,total),(5,0x10000+4*iteration),
+              (2,iteration+1),(0,0)]
+    for index,(dest,value) in enumerate(values):
+        p.trace.append(f'{loop_pc+4*index:08X} {loop_words[index]:08X} '
+                       f'{int(dest != 0)} {dest} {value:08X}\n')
+    p.requests += 2
+for offset,total in enumerate([1,3,6,10,15]):
+    p.emit(imm(3,7,2,1,4*offset),7,total)
+    p.requests += 1
+p.finish('mixed_ram_loop')
+print('Directed execution suite passed: 14 programs')
