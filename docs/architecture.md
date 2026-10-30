@@ -6,7 +6,8 @@ encoded in RTL.
 
 The hardware target is the Terasic DE10-Lite. The decoder, multi-cycle core,
 and board integration implement this contract. The [bring-up guide](bringup.md)
-distinguishes simulation results from the pending CPU Quartus build and board test.
+distinguishes simulation results, the completed Quartus build/timing checks,
+and the captured board upload/rerun results from the remaining recovery tests.
 
 ## Scope
 

@@ -25,10 +25,13 @@ waitrequest stalls. Host signals live in `jtag_uart_sim_pkg`. Neither simulation
 file is included in the Quartus project. The model tests the CPU-facing path,
 not the Intel JTAG scan protocol, native library, clock-domain crossing or hardware.
 
-The checked-in `sim/images/hello.hex` fixture is generated from `hello.S` with
-the application startup/linker. `make app` regenerates it. Normal simulation
-does not require a cross compiler. The fixture's entry wrapper and application
-exercise both code/data access from executable RAM and return to the loader.
+The checked-in `sim/images/hello.hex` and `sim/images/mixed_ram.hex` fixtures
+are generated from `hello.S` and `mixed_ram.S` with the application startup/linker.
+`make app` regenerates both. Normal simulation does not require a cross compiler.
+The board bench runs twice, once per application, exercising upload, CRC
+rejection, return/re-run, and reset. Hello additionally checks initialized data
+and BSS clearing; mixed_ram stores/reloads running sums and compares every
+final word against 1, 3, 6, 10, and 15 before printing success and returning 15.
 
 The 14 generated directed programs compare independent expected retirement
 traces, destination values, traps, request counts and reset recovery. Coverage
@@ -45,7 +48,7 @@ claimed. The board bench separately exercises the actual C loader and RV32I mach
 `make test-adapter` additionally checks local architectural pass/fail/trap/timeout
 paths. It uses LLVM by default or GNU tools with exported `RISCV_PREFIX`.
 No upstream architectural certification suite has run. Remaining CPU work
-includes broader uploaded mixed programs and reset coverage across every core state.
+includes broader uploaded programs and reset coverage across every core state.
 
 `python scripts/report4_evidence.py` repeats the regression and host checks and
 saves focused GHW/VCD traces, assertion transcripts and PNG waveforms under

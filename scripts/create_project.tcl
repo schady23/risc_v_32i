@@ -12,6 +12,12 @@ if {[is_project_open]} {
 file mkdir $project_dir
 source [file join $root_dir scripts generate_jtag_ip.tcl]
 # This is a generated project. Tracked sources/constraints are authoritative.
+# project_new -overwrite can retain an existing QSF's assignments. Move it
+# aside so obsolete GPIO files and pin assignments cannot leak into this build.
+set settings_file [file join $project_dir $project_name.qsf]
+if {[file exists $settings_file]} {
+    file rename -force $settings_file $settings_file.bak
+}
 project_new [file join $project_dir $project_name] -overwrite
 set_global_assignment -name FAMILY "MAX 10"
 set_global_assignment -name DEVICE 10M50DAF484C7G

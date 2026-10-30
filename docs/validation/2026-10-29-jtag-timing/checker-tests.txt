@@ -1,0 +1,2 @@
+missing_io_delays: correctly rejected; Incomplete or invalid timing constraints found; 4 distinct constraint rows
+negative_slack: correctly rejected; Negative timing slack found; 0 distinct constraint rows

@@ -14,7 +14,8 @@ read_sdc
 update_timing_netlist
 
 set summary [open [file join $report_dir timing_summary.rpt] w]
-set failed 0
+set timing_failed 0
+set constraints_failed 0
 set setup_count 0
 foreach_in_collection op [get_available_operating_conditions] {
     set_operating_conditions $op
@@ -31,7 +32,7 @@ foreach_in_collection op [get_available_operating_conditions] {
             set slack [get_path_info $path -slack]
             puts $summary "  $analysis worst slack: $slack ns"
             puts "$corner / $analysis: $slack ns"
-            if {$slack < 0.0} {set failed 1}
+            if {$slack < 0.0} {set timing_failed 1}
         }
         if {$count == 0} {puts $summary "  $analysis: no applicable paths"}
         report_timing -$analysis -npaths 10 -detail full_path \
@@ -59,11 +60,16 @@ foreach {suffix expected_rows} {
     }
     for {set row 1} {$row <= $expected_rows} {incr row} {
         set values [get_report_panel_row -id $id -row $row]
+        set row_failed 0
         foreach count [lrange $values 1 end] {
             if {![string is integer -strict $count] || $count != 0} {
-                puts $summary "Constraint failure: $values"
-                set failed 1
+                set row_failed 1
             }
+        }
+        if {$row_failed} {
+            puts $summary "Constraint failure: $values"
+            puts "Constraint failure: $values"
+            set constraints_failed 1
         }
     }
 }
@@ -73,5 +79,9 @@ unload_report
 project_close
 
 if {$setup_count == 0} {error "No constrained setup paths were found"}
-if {$failed} {error "Timing violations found; see $report_dir"}
+if {$timing_failed && $constraints_failed} {
+    error "Negative timing slack and incomplete/invalid constraints found; see $report_dir"
+}
+if {$timing_failed} {error "Negative timing slack found; see $report_dir"}
+if {$constraints_failed} {error "Incomplete or invalid timing constraints found; see $report_dir"}
 puts "Timing checks passed; reports: $report_dir"

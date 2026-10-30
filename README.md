@@ -16,7 +16,7 @@ Lite/Standard with MAX 10 and Platform Designer support:
 ```sh
 make test       # CPU, bus, JTAG adapter, loader integration, and host protocol
 make image      # Rebuild ROM loader (the generated ROM is also checked in)
-make app        # Build the uploadable hello assembly example
+make app        # Build the uploadable hello and mixed-RAM examples
 make build      # Generate Intel JTAG UART IP, compile FPGA, check timing
 make program    # Program the fresh .sof through USB-Blaster
 python -m pip install -r software/requirements.txt
@@ -46,6 +46,7 @@ assembly conventions, transfer details, recovery, and the memory map.
 ```sh
 python scripts/build_software.py --prefix riscv64-unknown-elf-
 python scripts/build_app.py software/hello.S --test-image sim/images/hello.hex
+python scripts/build_app.py software/mixed_ram.S --test-image sim/images/mixed_ram.hex
 python scripts/simulate.py
 python scripts/test_jtag_console.py
 quartus_sh -t scripts/build.tcl
@@ -93,14 +94,26 @@ application data is included directly in the uploaded RAM image.
 - The local architectural adapter's pass/fail/trap/timeout checks pass using GNU
   tools. Upstream architectural certification remains pending.
 - GHDL synthesis accepts `rv32i_system` (the vendor-independent system).
-- Intel IP generation, Quartus fit/timing, native host library communication,
-  and physical USB-Blaster operation have **not** been verified here. The GHDL
-  model represents the Intel IP's Avalon/FIFO interface, not the JTAG pins.
+- Intel JTAG UART IP generation, full Quartus compilation, and timing checks
+  pass with Quartus Prime Lite 25.1. All paths are constrained under the
+  documented JTAG I/O assumptions. Physical USB-Blaster upload, CRC verification,
+  execution and rerun of hello and mixed_ram are documented on October 29.
+  Recorded reset/error-recovery checks remain pending. The GHDL model represents
+  the Intel IP's Avalon/FIFO interface, not the JTAG pins.
 
 See the [JTAG verification record](docs/validation/2026-10-14-jtag/README.md)
 and the [October 15 decoder/reset evidence](docs/progress_reports/evidence/report-4-completion.md).
 The [October 23 reset and mixed-program evidence](docs/progress_reports/evidence/report-6-completion.md)
 adds four fetch/load reset cases and a five-iteration RAM loop with final readback.
+The [October 29 Quartus preparation record](docs/validation/2026-10-29-quartus-prep/README.md)
+records current Intel IP generation, analysis/elaboration, rebuilt loader,
+and upload/re-run simulation of the second assembly application.
+The [October 29 JTAG timing correction](docs/validation/2026-10-29-jtag-timing/README.md)
+records the successful full build, timing margins, JTAG I/O assumptions, and
+fresh programming-file hash.
+The [October 29 board evidence](docs/validation/2026-10-29-board/README.md)
+records the successful physical uploads/reruns and the recovery checks carried
+forward into Progress Report 7.
 The archived September GPIO and earlier October physical-UART results describe
 previous designs; their utilization, timing and SOF files do not validate this one.
 
@@ -117,11 +130,14 @@ previous designs; their utilization, timing and SOF files do not validate this o
   [Progress Report 5](<docs/progress_reports/Progress Report 5 rschader.docx>):
   architecture review, decoder/reset waveforms and updated schedules.
 - [Progress Report 6](<docs/progress_reports/Progress Report 6 rschader.docx>):
-  extended reset and mixed-program results, the current Quartus blocker, and
+  extended reset and mixed-program results, the October 23 Quartus blocker, and
   new build, DE10-Lite test and uploaded-application goals.
+- [Progress Report 7](<docs/progress_reports/Progress Report 7 rschader.docx>):
+  current build/timing results, board photo, application console screenshot,
+  previous and updated schedules, and recovery/documentation/final-report goals.
 
 `rtl/core/` contains the CPU; `rtl/memory/` contains ROM and RAM;
 `rtl/interconnect/` routes requests; `rtl/peripheral/` contains the JTAG adapter;
 `rtl/board/` contains the system and board wrappers. Intel IP is generated under
 the ignored `build/ip/` directory. `software/` contains the ROM loader and
-uploadable example. `scripts/` contains build, upload, verification and diagram tools.
+uploadable examples. `scripts/` contains build, upload, verification and diagram tools.

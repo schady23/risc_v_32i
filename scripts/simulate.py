@@ -32,6 +32,11 @@ def main():
     for bench in benches:
         subprocess.run([ghdl, '--elab-run', '--std=08', '--workdir=build/ghdl',
                         bench, '--assert-level=error'], cwd=ROOT, check=True, timeout=30)
+    subprocess.run([ghdl, '--elab-run', '--std=08', '--workdir=build/ghdl',
+                    'tb_de10_lite_top', '-gIMAGE_FILE=sim/images/mixed_ram.hex',
+                    '-gAPP_MESSAGE=Mixed RAM loop passed: 1 3 6 10 15',
+                    '-gAPP_EXIT=0000000F', '--assert-level=error'],
+                   cwd=ROOT, check=True, timeout=30)
     subprocess.run([sys.executable, 'scripts/test_execution.py'], cwd=ROOT, check=True)
 
 

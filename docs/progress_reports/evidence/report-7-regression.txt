@@ -1,0 +1,154 @@
+python3 scripts/simulate.py
+sim/tb_alu.vhd:51:5:@5ns:(report note): tb_alu passed
+simulation stopped @5ns
+sim/tb_decoder.vhd:498:5:@270612ns:(report note): tb_decoder passed: 270612 decode cases
+simulation stopped @270612ns
+sim/tb_decoder_focused.vhd:56:7:@1ns:(report note): ADDI x1,x0,-1 instr=FFF00093 imm=FFFFFFFF kind=instr_alu rd_write='1' size=mem_word
+sim/tb_decoder_focused.vhd:56:7:@11ns:(report note): LW x2,12(x1) instr=00C0A103 imm=0000000C kind=instr_load rd_write='1' size=mem_word
+sim/tb_decoder_focused.vhd:56:7:@21ns:(report note): SW x2,-4(x1) instr=FE20AE23 imm=FFFFFFFC kind=instr_store rd_write='0' size=mem_word
+sim/tb_decoder_focused.vhd:56:7:@31ns:(report note): BEQ x1,x2,8 instr=00208463 imm=00000008 kind=instr_branch rd_write='0' size=mem_word
+sim/tb_decoder_focused.vhd:56:7:@41ns:(report note): JAL x3,16 instr=010001EF imm=00000010 kind=instr_jal rd_write='1' size=mem_word
+sim/tb_decoder_focused.vhd:56:7:@51ns:(report note): Illegal encoding instr=FFFFFFFF imm=00000000 kind=instr_illegal rd_write='0' size=mem_word
+sim/tb_decoder_focused.vhd:56:7:@61ns:(report note): NOP recovery instr=00000013 imm=00000000 kind=instr_alu rd_write='1' size=mem_word
+sim/tb_decoder_focused.vhd:79:5:@70ns:(report note): tb_decoder_focused passed: 7 cases
+simulation stopped @70ns
+sim/tb_regfile.vhd:54:5:@26ns:(report note): tb_regfile passed
+simulation stopped @26ns
+sim/tb_jtag_uart.vhd:115:5:@6556ns:(report note): tb_jtag_uart passed: MMIO, waitrequest, FIFO backpressure, duplex, reset
+simulation stopped @6556ns
+../../src/ieee2008/numeric_std-body.vhdl:1641:7:@0ms:(assertion warning): NUMERIC_STD.">=": metavalue detected, returning FALSE
+../../src/ieee2008/numeric_std-body.vhdl:3053:7:@0ms:(assertion warning): NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+sim/tb_memory_bus.vhd:117:5:@486ns:(report note): tb_memory_bus passed
+simulation stopped @486ns
+../../src/ieee2008/numeric_std-body.vhdl:3053:7:@0ms:(assertion warning): NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+../../src/ieee2008/numeric_std-body.vhdl:3053:7:@0ms:(assertion warning): NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+../../src/ieee2008/numeric_std-body.vhdl:1641:7:@0ms:(assertion warning): NUMERIC_STD.">=": metavalue detected, returning FALSE
+../../src/ieee2008/numeric_std-body.vhdl:3053:7:@0ms:(assertion warning): NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+sim/tb_de10_lite_top.vhd:114:5:@8409710ns:(report note): tb_de10_lite_top passed: sim/images/hello.hex, upload/CRC, RAM execution, return/re-run, reset
+simulation stopped @8409710ns
+../../src/ieee2008/numeric_std-body.vhdl:3053:7:@0ms:(assertion warning): NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+../../src/ieee2008/numeric_std-body.vhdl:3053:7:@0ms:(assertion warning): NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+../../src/ieee2008/numeric_std-body.vhdl:1641:7:@0ms:(assertion warning): NUMERIC_STD.">=": metavalue detected, returning FALSE
+../../src/ieee2008/numeric_std-body.vhdl:3053:7:@0ms:(assertion warning): NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+sim/tb_core.vhd:107:5:@335ns:(report note): tb_core passed
+simulation stopped @335ns
+../../src/ieee2008/numeric_std-body.vhdl:3053:7:@0ms:(assertion warning): NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+../../src/ieee2008/numeric_std-body.vhdl:3053:7:@0ms:(assertion warning): NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+sim/tb_core_execution.vhd:175:5:@1006ns:(report note): tb_core_execution passed
+simulation stopped @1006ns
+../../src/ieee2008/numeric_std-body.vhdl:3053:7:@0ms:(assertion warning): NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+../../src/ieee2008/numeric_std-body.vhdl:3053:7:@0ms:(assertion warning): NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+../../src/ieee2008/numeric_std-body.vhdl:1641:7:@0ms:(assertion warning): NUMERIC_STD.">=": metavalue detected, returning FALSE
+../../src/ieee2008/numeric_std-body.vhdl:3053:7:@0ms:(assertion warning): NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+sim/tb_core_reset.vhd:137:5:@525ns:(report note): pre-acceptance store canceled; RAM unchanged; register file cleared
+sim/tb_core_reset.vhd:146:5:@815ns:(report note): accepted store preserved across reset; restart load returned 0x55
+sim/tb_core_reset.vhd:154:5:@1165ns:(report note): pending register write/retirement suppressed; restart verified
+sim/tb_core_reset.vhd:156:5:@1165ns:(report note): tb_core_reset passed: 3 injected resets, request gating, RAM persistence, register reset, PC zero
+simulation stopped @1165ns
+../../src/ieee2008/numeric_std-body.vhdl:3053:7:@0ms:(assertion warning): NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+../../src/ieee2008/numeric_std-body.vhdl:3053:7:@0ms:(assertion warning): NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+../../src/ieee2008/numeric_std-body.vhdl:1641:7:@0ms:(assertion warning): NUMERIC_STD.">=": metavalue detected, returning FALSE
+../../src/ieee2008/numeric_std-body.vhdl:3053:7:@0ms:(assertion warning): NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+sim/tb_core_reset_extended.vhd:116:5:@555ns:(report note): fetch request reset passed: request canceled, PC zero, x8 cleared
+sim/tb_core_reset_extended.vhd:124:5:@875ns:(report note): fetch response reset passed: stale instruction discarded
+sim/tb_core_reset_extended.vhd:131:5:@1495ns:(report note): load request reset passed: no canceled load writeback
+sim/tb_core_reset_extended.vhd:140:5:@2125ns:(report note): load response reset passed: pending data discarded, no writeback
+sim/tb_core_reset_extended.vhd:143:5:@2195ns:(report note): tb_core_reset_extended passed: 4 injected resets at fetch/load boundaries
+simulation stopped @2195ns
+../../src/ieee2008/numeric_std-body.vhdl:3053:7:@0ms:(assertion warning): NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+../../src/ieee2008/numeric_std-body.vhdl:3053:7:@0ms:(assertion warning): NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+../../src/ieee2008/numeric_std-body.vhdl:1641:7:@0ms:(assertion warning): NUMERIC_STD.">=": metavalue detected, returning FALSE
+../../src/ieee2008/numeric_std-body.vhdl:3053:7:@0ms:(assertion warning): NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+sim/tb_de10_lite_top.vhd:114:5:@10731890ns:(report note): tb_de10_lite_top passed: sim/images/mixed_ram.hex, upload/CRC, RAM execution, return/re-run, reset
+simulation stopped @10731890ns
+../../src/ieee2008/numeric_std-body.vhdl:3053:7:@0ms:(assertion warning): NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+../../src/ieee2008/numeric_std-body.vhdl:3053:7:@0ms:(assertion warning): NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+../../src/ieee2008/numeric_std-body.vhdl:1641:7:@0ms:(assertion warning): NUMERIC_STD.">=": metavalue detected, returning FALSE
+../../src/ieee2008/numeric_std-body.vhdl:3053:7:@0ms:(assertion warning): NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+sim/tb_program.vhd:97:9:@2496ns:(report note): tb_program passed: /home/schady/Projects/rv32i/risc_v_32i/build/execution/lanes.hex, retirements=37
+simulation stopped @2496ns
+../../src/ieee2008/numeric_std-body.vhdl:3053:7:@0ms:(assertion warning): NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+../../src/ieee2008/numeric_std-body.vhdl:3053:7:@0ms:(assertion warning): NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+../../src/ieee2008/numeric_std-body.vhdl:1641:7:@0ms:(assertion warning): NUMERIC_STD.">=": metavalue detected, returning FALSE
+../../src/ieee2008/numeric_std-body.vhdl:3053:7:@0ms:(assertion warning): NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+sim/tb_program.vhd:97:9:@5056ns:(report note): tb_program passed: /home/schady/Projects/rv32i/risc_v_32i/build/execution/alu_boundaries.hex, retirements=99
+simulation stopped @5056ns
+../../src/ieee2008/numeric_std-body.vhdl:3053:7:@0ms:(assertion warning): NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+../../src/ieee2008/numeric_std-body.vhdl:3053:7:@0ms:(assertion warning): NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+../../src/ieee2008/numeric_std-body.vhdl:1641:7:@0ms:(assertion warning): NUMERIC_STD.">=": metavalue detected, returning FALSE
+../../src/ieee2008/numeric_std-body.vhdl:3053:7:@0ms:(assertion warning): NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+sim/tb_program.vhd:97:9:@3556ns:(report note): tb_program passed: /home/schady/Projects/rv32i/risc_v_32i/build/execution/branches_jalr.hex, retirements=69
+simulation stopped @3556ns
+../../src/ieee2008/numeric_std-body.vhdl:3053:7:@0ms:(assertion warning): NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+../../src/ieee2008/numeric_std-body.vhdl:3053:7:@0ms:(assertion warning): NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+../../src/ieee2008/numeric_std-body.vhdl:1641:7:@0ms:(assertion warning): NUMERIC_STD.">=": metavalue detected, returning FALSE
+../../src/ieee2008/numeric_std-body.vhdl:3053:7:@0ms:(assertion warning): NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+sim/tb_program.vhd:97:9:@206ns:(report note): tb_program passed: /home/schady/Projects/rv32i/risc_v_32i/build/execution/misaligned_load_1_1.hex, retirements=2
+simulation stopped @206ns
+../../src/ieee2008/numeric_std-body.vhdl:3053:7:@0ms:(assertion warning): NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+../../src/ieee2008/numeric_std-body.vhdl:3053:7:@0ms:(assertion warning): NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+../../src/ieee2008/numeric_std-body.vhdl:1641:7:@0ms:(assertion warning): NUMERIC_STD.">=": metavalue detected, returning FALSE
+../../src/ieee2008/numeric_std-body.vhdl:3053:7:@0ms:(assertion warning): NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+sim/tb_program.vhd:97:9:@206ns:(report note): tb_program passed: /home/schady/Projects/rv32i/risc_v_32i/build/execution/misaligned_load_5_3.hex, retirements=2
+simulation stopped @206ns
+../../src/ieee2008/numeric_std-body.vhdl:3053:7:@0ms:(assertion warning): NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+../../src/ieee2008/numeric_std-body.vhdl:3053:7:@0ms:(assertion warning): NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+../../src/ieee2008/numeric_std-body.vhdl:1641:7:@0ms:(assertion warning): NUMERIC_STD.">=": metavalue detected, returning FALSE
+../../src/ieee2008/numeric_std-body.vhdl:3053:7:@0ms:(assertion warning): NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+sim/tb_program.vhd:97:9:@206ns:(report note): tb_program passed: /home/schady/Projects/rv32i/risc_v_32i/build/execution/misaligned_load_2_2.hex, retirements=2
+simulation stopped @206ns
+../../src/ieee2008/numeric_std-body.vhdl:3053:7:@0ms:(assertion warning): NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+../../src/ieee2008/numeric_std-body.vhdl:3053:7:@0ms:(assertion warning): NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+../../src/ieee2008/numeric_std-body.vhdl:1641:7:@0ms:(assertion warning): NUMERIC_STD.">=": metavalue detected, returning FALSE
+../../src/ieee2008/numeric_std-body.vhdl:3053:7:@0ms:(assertion warning): NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+sim/tb_program.vhd:97:9:@206ns:(report note): tb_program passed: /home/schady/Projects/rv32i/risc_v_32i/build/execution/misaligned_store_1_3.hex, retirements=2
+simulation stopped @206ns
+../../src/ieee2008/numeric_std-body.vhdl:3053:7:@0ms:(assertion warning): NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+../../src/ieee2008/numeric_std-body.vhdl:3053:7:@0ms:(assertion warning): NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+../../src/ieee2008/numeric_std-body.vhdl:1641:7:@0ms:(assertion warning): NUMERIC_STD.">=": metavalue detected, returning FALSE
+../../src/ieee2008/numeric_std-body.vhdl:3053:7:@0ms:(assertion warning): NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+sim/tb_program.vhd:97:9:@206ns:(report note): tb_program passed: /home/schady/Projects/rv32i/risc_v_32i/build/execution/misaligned_store_2_2.hex, retirements=2
+simulation stopped @206ns
+../../src/ieee2008/numeric_std-body.vhdl:3053:7:@0ms:(assertion warning): NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+../../src/ieee2008/numeric_std-body.vhdl:3053:7:@0ms:(assertion warning): NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+../../src/ieee2008/numeric_std-body.vhdl:1641:7:@0ms:(assertion warning): NUMERIC_STD.">=": metavalue detected, returning FALSE
+../../src/ieee2008/numeric_std-body.vhdl:3053:7:@0ms:(assertion warning): NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+sim/tb_program.vhd:97:9:@226ns:(report note): tb_program passed: /home/schady/Projects/rv32i/risc_v_32i/build/execution/load_x0_fault.hex, retirements=2
+simulation stopped @226ns
+../../src/ieee2008/numeric_std-body.vhdl:3053:7:@0ms:(assertion warning): NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+../../src/ieee2008/numeric_std-body.vhdl:3053:7:@0ms:(assertion warning): NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+../../src/ieee2008/numeric_std-body.vhdl:1641:7:@0ms:(assertion warning): NUMERIC_STD.">=": metavalue detected, returning FALSE
+../../src/ieee2008/numeric_std-body.vhdl:3053:7:@0ms:(assertion warning): NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+sim/tb_program.vhd:97:9:@226ns:(report note): tb_program passed: /home/schady/Projects/rv32i/risc_v_32i/build/execution/rom_store.hex, retirements=2
+simulation stopped @226ns
+../../src/ieee2008/numeric_std-body.vhdl:3053:7:@0ms:(assertion warning): NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+../../src/ieee2008/numeric_std-body.vhdl:3053:7:@0ms:(assertion warning): NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+../../src/ieee2008/numeric_std-body.vhdl:1641:7:@0ms:(assertion warning): NUMERIC_STD.">=": metavalue detected, returning FALSE
+../../src/ieee2008/numeric_std-body.vhdl:3053:7:@0ms:(assertion warning): NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+sim/tb_program.vhd:97:9:@226ns:(report note): tb_program passed: /home/schady/Projects/rv32i/risc_v_32i/build/execution/uart_byte.hex, retirements=2
+simulation stopped @226ns
+../../src/ieee2008/numeric_std-body.vhdl:3053:7:@0ms:(assertion warning): NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+../../src/ieee2008/numeric_std-body.vhdl:3053:7:@0ms:(assertion warning): NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+../../src/ieee2008/numeric_std-body.vhdl:1641:7:@0ms:(assertion warning): NUMERIC_STD.">=": metavalue detected, returning FALSE
+../../src/ieee2008/numeric_std-body.vhdl:3053:7:@0ms:(assertion warning): NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+sim/tb_program.vhd:97:9:@226ns:(report note): tb_program passed: /home/schady/Projects/rv32i/risc_v_32i/build/execution/uart_half.hex, retirements=2
+simulation stopped @226ns
+../../src/ieee2008/numeric_std-body.vhdl:3053:7:@0ms:(assertion warning): NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+../../src/ieee2008/numeric_std-body.vhdl:3053:7:@0ms:(assertion warning): NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+../../src/ieee2008/numeric_std-body.vhdl:1641:7:@0ms:(assertion warning): NUMERIC_STD.">=": metavalue detected, returning FALSE
+../../src/ieee2008/numeric_std-body.vhdl:3053:7:@0ms:(assertion warning): NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+sim/tb_program.vhd:97:9:@226ns:(report note): tb_program passed: /home/schady/Projects/rv32i/risc_v_32i/build/execution/readonly_store.hex, retirements=2
+simulation stopped @226ns
+../../src/ieee2008/numeric_std-body.vhdl:3053:7:@0ms:(assertion warning): NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+../../src/ieee2008/numeric_std-body.vhdl:3053:7:@0ms:(assertion warning): NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+../../src/ieee2008/numeric_std-body.vhdl:1641:7:@0ms:(assertion warning): NUMERIC_STD.">=": metavalue detected, returning FALSE
+../../src/ieee2008/numeric_std-body.vhdl:3053:7:@0ms:(assertion warning): NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+sim/tb_program.vhd:97:9:@2456ns:(report note): tb_program passed: /home/schady/Projects/rv32i/risc_v_32i/build/execution/mixed_ram_loop.hex, retirements=41
+simulation stopped @2456ns
+Directed execution suite passed: 14 programs
+python3 scripts/test_jtag_console.py
+.....
+----------------------------------------------------------------------
+Ran 5 tests in 0.692s
+
+OK

@@ -1,0 +1,162 @@
+Info: *******************************************************************
+Info: Running Quartus Prime Analysis & Elaboration
+    Info: Version 25.1std.0 Build 1129 10/21/2025 SC Lite Edition
+    Info: Copyright (C) 2025  Altera Corporation. All rights reserved.
+    Info: Your use of Altera Corporation's design tools, logic functions 
+    Info: and other software and tools, and any partner logic 
+    Info: functions, and any output files from any of the foregoing 
+    Info: (including device programming or simulation files), and any 
+    Info: associated documentation or information are expressly subject 
+    Info: to the terms and conditions of the Altera Program License 
+    Info: Subscription Agreement, the Altera Quartus Prime License Agreement,
+    Info: the Altera IP License Agreement, or other applicable license
+    Info: agreement, including, without limitation, that your use is for
+    Info: the sole purpose of programming logic devices manufactured by
+    Info: Altera and sold by Altera or its authorized distributors.  Please
+    Info: refer to the Altera Software License Subscription Agreements 
+    Info: on the Quartus Prime software download page.
+    Info: Processing started: Thu Oct 29 17:18:16 2026
+Info: Command: quartus_map risc_v_32i --analysis_and_elaboration
+Info (20032): Parallel compilation is enabled and will use up to 4 processors
+Info (12021): Found 1 design units, including 0 entities, in source file /home/schady/Projects/rv32i/risc_v_32i/rtl/pkg/rv32i_pkg.vhd
+    Info (12022): Found design unit 1: rv32i_pkg File: /home/schady/Projects/rv32i/risc_v_32i/rtl/pkg/rv32i_pkg.vhd Line: 4
+Info (12021): Found 1 design units, including 0 entities, in source file /home/schady/Projects/rv32i/risc_v_32i/rtl/pkg/memory_map_pkg.vhd
+    Info (12022): Found design unit 1: memory_map_pkg File: /home/schady/Projects/rv32i/risc_v_32i/rtl/pkg/memory_map_pkg.vhd Line: 4
+Info (12021): Found 1 design units, including 0 entities, in source file /home/schady/Projects/rv32i/risc_v_32i/rtl/memory/program_image_pkg.vhd
+    Info (12022): Found design unit 1: program_image_pkg File: /home/schady/Projects/rv32i/risc_v_32i/rtl/memory/program_image_pkg.vhd Line: 7
+Info (12021): Found 2 design units, including 1 entities, in source file /home/schady/Projects/rv32i/risc_v_32i/rtl/core/rv32i_alu.vhd
+    Info (12022): Found design unit 1: rv32i_alu-rtl File: /home/schady/Projects/rv32i/risc_v_32i/rtl/core/rv32i_alu.vhd Line: 16
+    Info (12023): Found entity 1: rv32i_alu File: /home/schady/Projects/rv32i/risc_v_32i/rtl/core/rv32i_alu.vhd Line: 7
+Info (12021): Found 2 design units, including 1 entities, in source file /home/schady/Projects/rv32i/risc_v_32i/rtl/core/rv32i_regfile.vhd
+    Info (12022): Found design unit 1: rv32i_regfile-rtl File: /home/schady/Projects/rv32i/risc_v_32i/rtl/core/rv32i_regfile.vhd Line: 21
+    Info (12023): Found entity 1: rv32i_regfile File: /home/schady/Projects/rv32i/risc_v_32i/rtl/core/rv32i_regfile.vhd Line: 7
+Info (12021): Found 2 design units, including 1 entities, in source file /home/schady/Projects/rv32i/risc_v_32i/rtl/core/rv32i_decoder.vhd
+    Info (12022): Found design unit 1: rv32i_decoder-rtl File: /home/schady/Projects/rv32i/risc_v_32i/rtl/core/rv32i_decoder.vhd Line: 24
+    Info (12023): Found entity 1: rv32i_decoder File: /home/schady/Projects/rv32i/risc_v_32i/rtl/core/rv32i_decoder.vhd Line: 12
+Info (12021): Found 2 design units, including 1 entities, in source file /home/schady/Projects/rv32i/risc_v_32i/rtl/core/rv32i_core.vhd
+    Info (12022): Found design unit 1: rv32i_core-rtl File: /home/schady/Projects/rv32i/risc_v_32i/rtl/core/rv32i_core.vhd Line: 40
+    Info (12023): Found entity 1: rv32i_core File: /home/schady/Projects/rv32i/risc_v_32i/rtl/core/rv32i_core.vhd Line: 7
+Info (12021): Found 2 design units, including 1 entities, in source file /home/schady/Projects/rv32i/risc_v_32i/rtl/memory/instruction_rom.vhd
+    Info (12022): Found design unit 1: instruction_rom-rtl File: /home/schady/Projects/rv32i/risc_v_32i/rtl/memory/instruction_rom.vhd Line: 25
+    Info (12023): Found entity 1: instruction_rom File: /home/schady/Projects/rv32i/risc_v_32i/rtl/memory/instruction_rom.vhd Line: 9
+Info (12021): Found 2 design units, including 1 entities, in source file /home/schady/Projects/rv32i/risc_v_32i/rtl/memory/ram_byte_bank.vhd
+    Info (12022): Found design unit 1: ram_byte_bank-rtl File: /home/schady/Projects/rv32i/risc_v_32i/rtl/memory/ram_byte_bank.vhd Line: 15
+    Info (12023): Found entity 1: ram_byte_bank File: /home/schady/Projects/rv32i/risc_v_32i/rtl/memory/ram_byte_bank.vhd Line: 6
+Info (12021): Found 2 design units, including 1 entities, in source file /home/schady/Projects/rv32i/risc_v_32i/rtl/memory/data_ram.vhd
+    Info (12022): Found design unit 1: data_ram-rtl File: /home/schady/Projects/rv32i/risc_v_32i/rtl/memory/data_ram.vhd Line: 21
+    Info (12023): Found entity 1: data_ram File: /home/schady/Projects/rv32i/risc_v_32i/rtl/memory/data_ram.vhd Line: 8
+Info (12021): Found 2 design units, including 1 entities, in source file /home/schady/Projects/rv32i/risc_v_32i/rtl/peripheral/jtag_uart_adapter.vhd
+    Info (12022): Found design unit 1: jtag_uart_adapter-rtl File: /home/schady/Projects/rv32i/risc_v_32i/rtl/peripheral/jtag_uart_adapter.vhd Line: 23
+    Info (12023): Found entity 1: jtag_uart_adapter File: /home/schady/Projects/rv32i/risc_v_32i/rtl/peripheral/jtag_uart_adapter.vhd Line: 9
+Info (12021): Found 2 design units, including 1 entities, in source file /home/schady/Projects/rv32i/risc_v_32i/rtl/interconnect/memory_bus.vhd
+    Info (12022): Found design unit 1: memory_bus-rtl File: /home/schady/Projects/rv32i/risc_v_32i/rtl/interconnect/memory_bus.vhd Line: 33
+    Info (12023): Found entity 1: memory_bus File: /home/schady/Projects/rv32i/risc_v_32i/rtl/interconnect/memory_bus.vhd Line: 8
+Info (12021): Found 2 design units, including 1 entities, in source file /home/schady/Projects/rv32i/risc_v_32i/rtl/board/reset_synchronizer.vhd
+    Info (12022): Found design unit 1: reset_synchronizer-rtl File: /home/schady/Projects/rv32i/risc_v_32i/rtl/board/reset_synchronizer.vhd Line: 12
+    Info (12023): Found entity 1: reset_synchronizer File: /home/schady/Projects/rv32i/risc_v_32i/rtl/board/reset_synchronizer.vhd Line: 4
+Info (12021): Found 2 design units, including 1 entities, in source file /home/schady/Projects/rv32i/risc_v_32i/rtl/board/rv32i_system.vhd
+    Info (12022): Found design unit 1: rv32i_system-rtl File: /home/schady/Projects/rv32i/risc_v_32i/rtl/board/rv32i_system.vhd Line: 16
+    Info (12023): Found entity 1: rv32i_system File: /home/schady/Projects/rv32i/risc_v_32i/rtl/board/rv32i_system.vhd Line: 7
+Info (12021): Found 2 design units, including 1 entities, in source file /home/schady/Projects/rv32i/risc_v_32i/rtl/board/de10_lite_top.vhd
+    Info (12022): Found design unit 1: de10_lite_top-rtl File: /home/schady/Projects/rv32i/risc_v_32i/rtl/board/de10_lite_top.vhd Line: 9
+    Info (12023): Found entity 1: de10_lite_top File: /home/schady/Projects/rv32i/risc_v_32i/rtl/board/de10_lite_top.vhd Line: 6
+Info (12021): Found 2 design units, including 1 entities, in source file /home/schady/Projects/rv32i/risc_v_32i/build/ip/jtag_uart_system/synthesis/jtag_uart_system.vhd
+    Info (12022): Found design unit 1: jtag_uart_system-rtl File: /home/schady/Projects/rv32i/risc_v_32i/build/ip/jtag_uart_system/synthesis/jtag_uart_system.vhd Line: 23
+    Info (12023): Found entity 1: jtag_uart_system File: /home/schady/Projects/rv32i/risc_v_32i/build/ip/jtag_uart_system/synthesis/jtag_uart_system.vhd Line: 9
+Info (12021): Found 1 design units, including 1 entities, in source file /home/schady/Projects/rv32i/risc_v_32i/build/ip/jtag_uart_system/synthesis/submodules/altera_avalon_jtag_uart.sv
+    Info (12023): Found entity 1: altera_avalon_jtag_uart File: /home/schady/Projects/rv32i/risc_v_32i/build/ip/jtag_uart_system/synthesis/submodules/altera_avalon_jtag_uart.sv Line: 22
+Info (12021): Found 1 design units, including 1 entities, in source file /home/schady/Projects/rv32i/risc_v_32i/build/ip/jtag_uart_system/synthesis/submodules/altera_avalon_jtag_uart_log_module.sv
+    Info (12023): Found entity 1: altera_avalon_jtag_uart_log_module File: /home/schady/Projects/rv32i/risc_v_32i/build/ip/jtag_uart_system/synthesis/submodules/altera_avalon_jtag_uart_log_module.sv Line: 22
+Info (12021): Found 1 design units, including 1 entities, in source file /home/schady/Projects/rv32i/risc_v_32i/build/ip/jtag_uart_system/synthesis/submodules/altera_avalon_jtag_uart_scfifo_r.sv
+    Info (12023): Found entity 1: altera_avalon_jtag_uart_scfifo_r File: /home/schady/Projects/rv32i/risc_v_32i/build/ip/jtag_uart_system/synthesis/submodules/altera_avalon_jtag_uart_scfifo_r.sv Line: 22
+Info (12021): Found 1 design units, including 1 entities, in source file /home/schady/Projects/rv32i/risc_v_32i/build/ip/jtag_uart_system/synthesis/submodules/altera_avalon_jtag_uart_scfifo_w.sv
+    Info (12023): Found entity 1: altera_avalon_jtag_uart_scfifo_w File: /home/schady/Projects/rv32i/risc_v_32i/build/ip/jtag_uart_system/synthesis/submodules/altera_avalon_jtag_uart_scfifo_w.sv Line: 22
+Info (12021): Found 1 design units, including 1 entities, in source file /home/schady/Projects/rv32i/risc_v_32i/build/ip/jtag_uart_system/synthesis/submodules/altera_avalon_jtag_uart_sim_scfifo_r.sv
+    Info (12023): Found entity 1: altera_avalon_jtag_uart_sim_scfifo_r File: /home/schady/Projects/rv32i/risc_v_32i/build/ip/jtag_uart_system/synthesis/submodules/altera_avalon_jtag_uart_sim_scfifo_r.sv Line: 22
+Info (12021): Found 1 design units, including 1 entities, in source file /home/schady/Projects/rv32i/risc_v_32i/build/ip/jtag_uart_system/synthesis/submodules/altera_avalon_jtag_uart_sim_scfifo_w.sv
+    Info (12023): Found entity 1: altera_avalon_jtag_uart_sim_scfifo_w File: /home/schady/Projects/rv32i/risc_v_32i/build/ip/jtag_uart_system/synthesis/submodules/altera_avalon_jtag_uart_sim_scfifo_w.sv Line: 22
+Info (12127): Elaborating entity "de10_lite_top" for the top level hierarchy
+Info (12128): Elaborating entity "reset_synchronizer" for hierarchy "reset_synchronizer:reset_sync" File: /home/schady/Projects/rv32i/risc_v_32i/rtl/board/de10_lite_top.vhd Line: 22
+Info (12128): Elaborating entity "rv32i_system" for hierarchy "rv32i_system:system_core" File: /home/schady/Projects/rv32i/risc_v_32i/rtl/board/de10_lite_top.vhd Line: 24
+Info (12128): Elaborating entity "rv32i_core" for hierarchy "rv32i_system:system_core|rv32i_core:cpu" File: /home/schady/Projects/rv32i/risc_v_32i/rtl/board/rv32i_system.vhd Line: 21
+Info (12128): Elaborating entity "rv32i_decoder" for hierarchy "rv32i_system:system_core|rv32i_core:cpu|rv32i_decoder:decoder" File: /home/schady/Projects/rv32i/risc_v_32i/rtl/core/rv32i_core.vhd Line: 68
+Info (12128): Elaborating entity "rv32i_regfile" for hierarchy "rv32i_system:system_core|rv32i_core:cpu|rv32i_regfile:registers" File: /home/schady/Projects/rv32i/risc_v_32i/rtl/core/rv32i_core.vhd Line: 72
+Info (12128): Elaborating entity "rv32i_alu" for hierarchy "rv32i_system:system_core|rv32i_core:cpu|rv32i_alu:alu" File: /home/schady/Projects/rv32i/risc_v_32i/rtl/core/rv32i_core.vhd Line: 82
+Info (12128): Elaborating entity "memory_bus" for hierarchy "rv32i_system:system_core|memory_bus:bus_system" File: /home/schady/Projects/rv32i/risc_v_32i/rtl/board/rv32i_system.vhd Line: 30
+Info (12128): Elaborating entity "instruction_rom" for hierarchy "rv32i_system:system_core|memory_bus:bus_system|instruction_rom:program_rom" File: /home/schady/Projects/rv32i/risc_v_32i/rtl/interconnect/memory_bus.vhd Line: 44
+Info (12128): Elaborating entity "data_ram" for hierarchy "rv32i_system:system_core|memory_bus:bus_system|data_ram:data_memory" File: /home/schady/Projects/rv32i/risc_v_32i/rtl/interconnect/memory_bus.vhd Line: 57
+Info (12128): Elaborating entity "ram_byte_bank" for hierarchy "rv32i_system:system_core|memory_bus:bus_system|data_ram:data_memory|ram_byte_bank:\banks:0:storage" File: /home/schady/Projects/rv32i/risc_v_32i/rtl/memory/data_ram.vhd Line: 38
+Info (12128): Elaborating entity "jtag_uart_adapter" for hierarchy "rv32i_system:system_core|memory_bus:bus_system|jtag_uart_adapter:uart_device" File: /home/schady/Projects/rv32i/risc_v_32i/rtl/interconnect/memory_bus.vhd Line: 69
+Info (12128): Elaborating entity "jtag_uart_system" for hierarchy "jtag_uart_system:jtag" File: /home/schady/Projects/rv32i/risc_v_32i/rtl/board/de10_lite_top.vhd Line: 29
+Info (12128): Elaborating entity "altera_avalon_jtag_uart" for hierarchy "jtag_uart_system:jtag|altera_avalon_jtag_uart:jtag_uart" File: /home/schady/Projects/rv32i/risc_v_32i/build/ip/jtag_uart_system/synthesis/jtag_uart_system.vhd Line: 58
+Info (12128): Elaborating entity "altera_avalon_jtag_uart_scfifo_w" for hierarchy "jtag_uart_system:jtag|altera_avalon_jtag_uart:jtag_uart|altera_avalon_jtag_uart_scfifo_w:altera_avalon_jtag_uart_scfifo_w" File: /home/schady/Projects/rv32i/risc_v_32i/build/ip/jtag_uart_system/synthesis/submodules/altera_avalon_jtag_uart.sv Line: 133
+Info (12128): Elaborating entity "scfifo" for hierarchy "jtag_uart_system:jtag|altera_avalon_jtag_uart:jtag_uart|altera_avalon_jtag_uart_scfifo_w:altera_avalon_jtag_uart_scfifo_w|scfifo:wfifo" File: /home/schady/Projects/rv32i/risc_v_32i/build/ip/jtag_uart_system/synthesis/submodules/altera_avalon_jtag_uart_scfifo_w.sv Line: 97
+Info (12130): Elaborated megafunction instantiation "jtag_uart_system:jtag|altera_avalon_jtag_uart:jtag_uart|altera_avalon_jtag_uart_scfifo_w:altera_avalon_jtag_uart_scfifo_w|scfifo:wfifo" File: /home/schady/Projects/rv32i/risc_v_32i/build/ip/jtag_uart_system/synthesis/submodules/altera_avalon_jtag_uart_scfifo_w.sv Line: 97
+Info (12133): Instantiated megafunction "jtag_uart_system:jtag|altera_avalon_jtag_uart:jtag_uart|altera_avalon_jtag_uart_scfifo_w:altera_avalon_jtag_uart_scfifo_w|scfifo:wfifo" with the following parameter: File: /home/schady/Projects/rv32i/risc_v_32i/build/ip/jtag_uart_system/synthesis/submodules/altera_avalon_jtag_uart_scfifo_w.sv Line: 97
+    Info (12134): Parameter "lpm_hint" = "RAM_BLOCK_TYPE=AUTO"
+    Info (12134): Parameter "lpm_numwords" = "64"
+    Info (12134): Parameter "lpm_showahead" = "OFF"
+    Info (12134): Parameter "lpm_type" = "scfifo"
+    Info (12134): Parameter "lpm_width" = "8"
+    Info (12134): Parameter "lpm_widthu" = "6"
+    Info (12134): Parameter "overflow_checking" = "OFF"
+    Info (12134): Parameter "underflow_checking" = "OFF"
+    Info (12134): Parameter "use_eab" = "ON"
+Info (12021): Found 1 design units, including 1 entities, in source file db/scfifo_7131.tdf
+    Info (12023): Found entity 1: scfifo_7131 File: /home/schady/Projects/rv32i/risc_v_32i/build/quartus/db/scfifo_7131.tdf Line: 25
+Info (12128): Elaborating entity "scfifo_7131" for hierarchy "jtag_uart_system:jtag|altera_avalon_jtag_uart:jtag_uart|altera_avalon_jtag_uart_scfifo_w:altera_avalon_jtag_uart_scfifo_w|scfifo:wfifo|scfifo_7131:auto_generated" File: /opt/intelFPGA/25.1/quartus/libraries/megafunctions/scfifo.tdf Line: 300
+Info (12021): Found 1 design units, including 1 entities, in source file db/a_dpfifo_bb01.tdf
+    Info (12023): Found entity 1: a_dpfifo_bb01 File: /home/schady/Projects/rv32i/risc_v_32i/build/quartus/db/a_dpfifo_bb01.tdf Line: 29
+Info (12128): Elaborating entity "a_dpfifo_bb01" for hierarchy "jtag_uart_system:jtag|altera_avalon_jtag_uart:jtag_uart|altera_avalon_jtag_uart_scfifo_w:altera_avalon_jtag_uart_scfifo_w|scfifo:wfifo|scfifo_7131:auto_generated|a_dpfifo_bb01:dpfifo" File: /home/schady/Projects/rv32i/risc_v_32i/build/quartus/db/scfifo_7131.tdf Line: 39
+Info (12021): Found 1 design units, including 1 entities, in source file db/a_fefifo_7cf.tdf
+    Info (12023): Found entity 1: a_fefifo_7cf File: /home/schady/Projects/rv32i/risc_v_32i/build/quartus/db/a_fefifo_7cf.tdf Line: 25
+Info (12128): Elaborating entity "a_fefifo_7cf" for hierarchy "jtag_uart_system:jtag|altera_avalon_jtag_uart:jtag_uart|altera_avalon_jtag_uart_scfifo_w:altera_avalon_jtag_uart_scfifo_w|scfifo:wfifo|scfifo_7131:auto_generated|a_dpfifo_bb01:dpfifo|a_fefifo_7cf:fifo_state" File: /home/schady/Projects/rv32i/risc_v_32i/build/quartus/db/a_dpfifo_bb01.tdf Line: 43
+Info (12021): Found 1 design units, including 1 entities, in source file db/cntr_337.tdf
+    Info (12023): Found entity 1: cntr_337 File: /home/schady/Projects/rv32i/risc_v_32i/build/quartus/db/cntr_337.tdf Line: 26
+Info (12128): Elaborating entity "cntr_337" for hierarchy "jtag_uart_system:jtag|altera_avalon_jtag_uart:jtag_uart|altera_avalon_jtag_uart_scfifo_w:altera_avalon_jtag_uart_scfifo_w|scfifo:wfifo|scfifo_7131:auto_generated|a_dpfifo_bb01:dpfifo|a_fefifo_7cf:fifo_state|cntr_337:count_usedw" File: /home/schady/Projects/rv32i/risc_v_32i/build/quartus/db/a_fefifo_7cf.tdf Line: 39
+Info (12021): Found 1 design units, including 1 entities, in source file db/altsyncram_dtn1.tdf
+    Info (12023): Found entity 1: altsyncram_dtn1 File: /home/schady/Projects/rv32i/risc_v_32i/build/quartus/db/altsyncram_dtn1.tdf Line: 28
+Info (12128): Elaborating entity "altsyncram_dtn1" for hierarchy "jtag_uart_system:jtag|altera_avalon_jtag_uart:jtag_uart|altera_avalon_jtag_uart_scfifo_w:altera_avalon_jtag_uart_scfifo_w|scfifo:wfifo|scfifo_7131:auto_generated|a_dpfifo_bb01:dpfifo|altsyncram_dtn1:FIFOram" File: /home/schady/Projects/rv32i/risc_v_32i/build/quartus/db/a_dpfifo_bb01.tdf Line: 44
+Info (12021): Found 1 design units, including 1 entities, in source file db/cntr_n2b.tdf
+    Info (12023): Found entity 1: cntr_n2b File: /home/schady/Projects/rv32i/risc_v_32i/build/quartus/db/cntr_n2b.tdf Line: 26
+Info (12128): Elaborating entity "cntr_n2b" for hierarchy "jtag_uart_system:jtag|altera_avalon_jtag_uart:jtag_uart|altera_avalon_jtag_uart_scfifo_w:altera_avalon_jtag_uart_scfifo_w|scfifo:wfifo|scfifo_7131:auto_generated|a_dpfifo_bb01:dpfifo|cntr_n2b:rd_ptr_count" File: /home/schady/Projects/rv32i/risc_v_32i/build/quartus/db/a_dpfifo_bb01.tdf Line: 45
+Info (12128): Elaborating entity "altera_avalon_jtag_uart_scfifo_r" for hierarchy "jtag_uart_system:jtag|altera_avalon_jtag_uart:jtag_uart|altera_avalon_jtag_uart_scfifo_r:altera_avalon_jtag_uart_scfifo_r" File: /home/schady/Projects/rv32i/risc_v_32i/build/ip/jtag_uart_system/synthesis/submodules/altera_avalon_jtag_uart.sv Line: 155
+Info (12128): Elaborating entity "alt_jtag_atlantic" for hierarchy "jtag_uart_system:jtag|altera_avalon_jtag_uart:jtag_uart|alt_jtag_atlantic:altera_avalon_jtag_uart_alt_jtag_atlantic" File: /home/schady/Projects/rv32i/risc_v_32i/build/ip/jtag_uart_system/synthesis/submodules/altera_avalon_jtag_uart.sv Line: 281
+Info (12130): Elaborated megafunction instantiation "jtag_uart_system:jtag|altera_avalon_jtag_uart:jtag_uart|alt_jtag_atlantic:altera_avalon_jtag_uart_alt_jtag_atlantic" File: /home/schady/Projects/rv32i/risc_v_32i/build/ip/jtag_uart_system/synthesis/submodules/altera_avalon_jtag_uart.sv Line: 281
+Info (12133): Instantiated megafunction "jtag_uart_system:jtag|altera_avalon_jtag_uart:jtag_uart|alt_jtag_atlantic:altera_avalon_jtag_uart_alt_jtag_atlantic" with the following parameter: File: /home/schady/Projects/rv32i/risc_v_32i/build/ip/jtag_uart_system/synthesis/submodules/altera_avalon_jtag_uart.sv Line: 281
+    Info (12134): Parameter "INSTANCE_ID" = "0"
+    Info (12134): Parameter "LOG2_RXFIFO_DEPTH" = "6"
+    Info (12134): Parameter "LOG2_TXFIFO_DEPTH" = "6"
+    Info (12134): Parameter "SLD_AUTO_INSTANCE_INDEX" = "YES"
+Info (12128): Elaborating entity "sld_jtag_endpoint_adapter" for hierarchy "jtag_uart_system:jtag|altera_avalon_jtag_uart:jtag_uart|alt_jtag_atlantic:altera_avalon_jtag_uart_alt_jtag_atlantic|sld_jtag_endpoint_adapter:inst" File: /opt/intelFPGA/25.1/quartus/libraries/megafunctions/alt_jtag_atlantic.v Line: 276
+Info (12128): Elaborating entity "sld_jtag_endpoint_adapter_impl" for hierarchy "jtag_uart_system:jtag|altera_avalon_jtag_uart:jtag_uart|alt_jtag_atlantic:altera_avalon_jtag_uart_alt_jtag_atlantic|sld_jtag_endpoint_adapter:inst|sld_jtag_endpoint_adapter_impl:sld_jtag_endpoint_adapter_impl_inst" File: /opt/intelFPGA/25.1/quartus/libraries/megafunctions/sld_jtag_endpoint_adapter.vhd Line: 232
+Info (11170): Starting IP generation for the debug fabric: alt_sld_fab.
+Info (11172): 2026.10.29.17:18:33 Progress: Loading sld4d198435/alt_sld_fab_wrapper_hw.tcl
+Info (11172): Alt_sld_fab.alt_sld_fab: SLD fabric agents which did not specify prefer_host were connected to JTAG
+Info (11172): Alt_sld_fab: Generating "alt_sld_fab" for QUARTUS_SYNTH
+Info (11172): Alt_sld_fab: "alt_sld_fab" instantiated alt_sld_fab "alt_sld_fab"
+Info (11172): Presplit: "alt_sld_fab" instantiated altera_super_splitter "presplit"
+Info (11172): Splitter: "alt_sld_fab" instantiated altera_sld_splitter "splitter"
+Info (11172): Sldfabric: "alt_sld_fab" instantiated altera_sld_jtag_hub "sldfabric"
+Info (11172): Ident: "alt_sld_fab" instantiated altera_connection_identification_hub "ident"
+Info (11172): Alt_sld_fab: Done "alt_sld_fab" with 6 modules, 6 files
+Info (11171): Finished IP generation for the debug fabric: alt_sld_fab.
+Info (12021): Found 1 design units, including 1 entities, in source file db/ip/sld4d198435/alt_sld_fab.v
+    Info (12023): Found entity 1: alt_sld_fab File: /home/schady/Projects/rv32i/risc_v_32i/build/quartus/db/ip/sld4d198435/alt_sld_fab.v Line: 9
+Info (12021): Found 1 design units, including 1 entities, in source file db/ip/sld4d198435/submodules/alt_sld_fab_alt_sld_fab.v
+    Info (12023): Found entity 1: alt_sld_fab_alt_sld_fab File: /home/schady/Projects/rv32i/risc_v_32i/build/quartus/db/ip/sld4d198435/submodules/alt_sld_fab_alt_sld_fab.v Line: 9
+Info (12021): Found 1 design units, including 1 entities, in source file db/ip/sld4d198435/submodules/alt_sld_fab_alt_sld_fab_ident.sv
+    Info (12023): Found entity 1: alt_sld_fab_alt_sld_fab_ident File: /home/schady/Projects/rv32i/risc_v_32i/build/quartus/db/ip/sld4d198435/submodules/alt_sld_fab_alt_sld_fab_ident.sv Line: 33
+Info (12021): Found 1 design units, including 1 entities, in source file db/ip/sld4d198435/submodules/alt_sld_fab_alt_sld_fab_presplit.sv
+    Info (12023): Found entity 1: alt_sld_fab_alt_sld_fab_presplit File: /home/schady/Projects/rv32i/risc_v_32i/build/quartus/db/ip/sld4d198435/submodules/alt_sld_fab_alt_sld_fab_presplit.sv Line: 3
+Info (12021): Found 2 design units, including 1 entities, in source file db/ip/sld4d198435/submodules/alt_sld_fab_alt_sld_fab_sldfabric.vhd
+    Info (12022): Found design unit 1: alt_sld_fab_alt_sld_fab_sldfabric-rtl File: /home/schady/Projects/rv32i/risc_v_32i/build/quartus/db/ip/sld4d198435/submodules/alt_sld_fab_alt_sld_fab_sldfabric.vhd Line: 102
+    Info (12023): Found entity 1: alt_sld_fab_alt_sld_fab_sldfabric File: /home/schady/Projects/rv32i/risc_v_32i/build/quartus/db/ip/sld4d198435/submodules/alt_sld_fab_alt_sld_fab_sldfabric.vhd Line: 11
+Info (12021): Found 1 design units, including 1 entities, in source file db/ip/sld4d198435/submodules/alt_sld_fab_alt_sld_fab_splitter.sv
+    Info (12023): Found entity 1: alt_sld_fab_alt_sld_fab_splitter File: /home/schady/Projects/rv32i/risc_v_32i/build/quartus/db/ip/sld4d198435/submodules/alt_sld_fab_alt_sld_fab_splitter.sv Line: 3
+Warning (12241): 1 hierarchies have connectivity warnings - see the Connectivity Checks report folder
+Info: Quartus Prime Analysis & Elaboration was successful. 0 errors, 1 warning
+    Info: Peak virtual memory: 791 megabytes
+    Info: Processing ended: Thu Oct 29 17:18:38 2026
+    Info: Elapsed time: 00:00:22
+    Info: Total CPU time (on all processors): 00:01:01

@@ -1,0 +1,32 @@
+{
+  "report_number": 7,
+  "reporting_period": "2026-10-23 through 2026-10-29",
+  "report_sha256": "870b29f0aeba6605f8b9e2cceafdd8dea1071282faec2db437207f15675726b6",
+  "rendered_pages": 6,
+  "all_pages_visually_reviewed": true,
+  "template_sha256": "ffe6792ab289fbaf0abd78e852b10105244599167ea3d08b6379b9a0990f5c25",
+  "preserve_only_package_parts_verified": 21,
+  "original_photo_and_screenshot_unchanged": true,
+  "previous_gantt_matches_report_6_current": true,
+  "simulation_and_host_tests": "passed",
+  "quartus_timing_check": "passed",
+  "goal_statuses": [
+    "complete",
+    "partially complete",
+    "complete"
+  ],
+  "next_goal_targets": [
+    "2026-11-06",
+    "2026-11-06",
+    "2026-11-12"
+  ],
+  "evidence_sha256": {
+    "report-7-board-photo.jpg": "d6b0a21e554e90ba3ff021ef46083935f556db1e5fdb2ed0eb36c97fcded2c04",
+    "report-7-console.png": "9538aad81459522915850e63afe0ca683766d015a37813f5a4e9a20708d5aa66",
+    "report-7-previous-gantt.png": "b7f65584cdf6cdf9d4482c8d1645fc0190a2c35d426e14aba8ddb52b2f88cd31",
+    "report-7-current-gantt.png": "a8482ab3dd03f7e4204f6a5686bbdf0b1013ba092bd85dc9650ff7bcc41ba431",
+    "report-7-regression.txt": "5a0ac99a24458871ef8feb036fb02550e19ac9b37cf839c98e87ad3883984460",
+    "report-7-timing-check.txt": "95439c66e04cd848d8f625bc73f5fe980cbfa3480b4d86ac7ba615f093b7ce6c"
+  },
+  "board_scope": "hello and mixed_ram CRC-verified upload, execution, return and rerun; recorded recovery tests carried forward"
+}

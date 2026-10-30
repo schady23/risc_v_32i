@@ -1,0 +1,19 @@
+Info: Starting: Create HDL design files for synthesis
+Info: qsys-generate /home/schady/Projects/rv32i/risc_v_32i/build/ip/jtag_uart_system.qsys --synthesis=VHDL --output-directory=/home/schady/Projects/rv32i/risc_v_32i/build/ip/jtag_uart_system/synthesis --family="MAX 10" --part=10M50DAF484C7G
+Progress: Loading ip/jtag_uart_system.qsys
+Progress: Reading input file
+Progress: Adding clock [altera_clock_bridge 25.1]
+Progress: Parameterizing module clock
+Progress: Adding jtag_uart [altera_avalon_jtag_uart 25.1]
+Progress: Parameterizing module jtag_uart
+Progress: Building connections
+Progress: Parameterizing connections
+Progress: Validating
+Progress: Done reading input file
+Info: jtag_uart_system.jtag_uart: JTAG UART IP input clock need to be at least double (2x) the operating frequency of JTAG TCK on board
+Warning: jtag_uart_system.jtag_uart: Interrupt sender jtag_uart.irq is not connected to an interrupt receiver
+Info: jtag_uart_system: Generating "jtag_uart_system" for QUARTUS_SYNTH
+Info: jtag_uart: "jtag_uart_system" instantiated altera_avalon_jtag_uart "jtag_uart"
+Info: jtag_uart_system: Done "jtag_uart_system" with 2 modules, 7 files
+Info: qsys-generate succeeded.
+Info: Finished: Create HDL design files for synthesis

@@ -80,6 +80,33 @@ python scripts/jtag_console.py run
 Change the assembly, rebuild it and upload the new binary. The FPGA .sof and
 ROM loader do not need rebuilding for application changes.
 
+The second example, `software/mixed_ram.S`, combines arithmetic, backward
+branches, stores, and loads. It stores the running sums of 1 through 5 into a
+20-byte BSS array, immediately reloads each value, and then checks all five
+final RAM words against the fixed expected values 1, 3, 6, 10, and 15.
+Build and upload it after testing hello, using the same FPGA configuration:
+
+```sh
+python scripts/build_app.py software/mixed_ram.S
+python scripts/jtag_console.py upload software/build/mixed_ram.bin --run
+python scripts/jtag_console.py run
+```
+
+Both runs must produce:
+
+```text
+RUN
+Mixed RAM loop passed: 1 3 6 10 15
+EXIT 0000000F
+ready>
+```
+
+A failed RAM check prints `Mixed RAM loop failed` and returns `EXIT 00000063`.
+`make app` builds both examples and regenerates their checked-in simulation
+images. The integration bench uploads and runs each through the real loader
+with the simulated Avalon/FIFO transport. Save the physical board output and
+a photo with the tested SOF hash when completing the hardware acceptance.
+
 To select a specific cable/device/instance, put options before the subcommand:
 
 ```sh
@@ -169,10 +196,15 @@ after a program hangs/traps or a connection breaks partway through a header
 or body. The loader has no asynchronous abort or hardware debugger.
 
 The CPU/ROM/RAM/adapter path is tested with a FIFO/Avalon model in GHDL. Host
-protocol tests use an independent peer. Neither test substitutes for generating
-the actual Intel IP, checking Quartus timing, loading the .sof, and exercising
-the native host libraries/USB-Blaster. Those hardware checks remain pending.
-See the [verification record](validation/2026-10-14-jtag/README.md).
+protocol tests use an independent peer. The October 29
+[build and timing record](validation/2026-10-29-jtag-timing/README.md) documents
+the current Intel IP and successful full build. The
+[board photo and console screenshot](validation/2026-10-29-board/README.md)
+document physical upload, CRC verification, execution and rerun of both
+applications through the native JTAG libraries and USB-Blaster. Recorded
+reset-after-upload and interrupted-transfer/bad-CRC recovery checks remain
+the next hardware acceptance work. The earlier
+[verification record](validation/2026-10-14-jtag/README.md) retains its dated scope.
 
 References: [Intel JTAG UART documentation](https://www.intel.com/programmable/technical-pdfs/683130.pdf)
 and the [Python binding's source/documentation](https://github.com/tomverbeure/intel_jtag_uart).

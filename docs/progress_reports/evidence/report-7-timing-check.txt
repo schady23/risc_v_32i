@@ -1,0 +1,169 @@
+quartus_sta -t scripts/check_timing.tcl
+Info: *******************************************************************
+Info: Running Quartus Prime Timing Analyzer
+    Info: Version 25.1std.0 Build 1129 10/21/2025 SC Lite Edition
+    Info: Copyright (C) 2025  Altera Corporation. All rights reserved.
+    Info: Your use of Altera Corporation's design tools, logic functions 
+    Info: and other software and tools, and any partner logic 
+    Info: functions, and any output files from any of the foregoing 
+    Info: (including device programming or simulation files), and any 
+    Info: associated documentation or information are expressly subject 
+    Info: to the terms and conditions of the Altera Program License 
+    Info: Subscription Agreement, the Altera Quartus Prime License Agreement,
+    Info: the Altera IP License Agreement, or other applicable license
+    Info: agreement, including, without limitation, that your use is for
+    Info: the sole purpose of programming logic devices manufactured by
+    Info: Altera and sold by Altera or its authorized distributors.  Please
+    Info: refer to the Altera Software License Subscription Agreements 
+    Info: on the Quartus Prime software download page.
+    Info: Processing started: Thu Oct 29 21:38:38 2026
+Info: Command: quartus_sta -t scripts/check_timing.tcl
+Info (20032): Parallel compilation is enabled and will use up to 4 processors
+Info (21076): High junction temperature operating condition is not set. Assuming a default value of '85'.
+Info (21076): Low junction temperature operating condition is not set. Assuming a default value of '0'.
+Info (332164): Evaluating HDL-embedded SDC commands
+    Info (332165): Entity alt_jtag_atlantic
+        Info (332166): set_false_path -from [get_registers {*|alt_jtag_atlantic:*|jupdate}] -to [get_registers {*|alt_jtag_atlantic:*|jupdate1*}] 
+        Info (332166): set_false_path -from [get_registers {*|alt_jtag_atlantic:*|rdata[*]}] -to [get_registers {*|alt_jtag_atlantic*|td_shift[*]}]
+        Info (332166): set_false_path -from [get_registers {*|alt_jtag_atlantic:*|rdata[*]}] -to [get_registers {*|alt_jtag_atlantic*|td_shift[*]}]
+        Info (332166): set_false_path -from [get_registers {*|alt_jtag_atlantic:*|rdata[*]}] -to [get_registers {*|alt_jtag_atlantic*|td_shift[*]}]
+        Info (332166): set_false_path -from [get_registers {*|alt_jtag_atlantic:*|rdata[*]}] -to [get_registers {*|alt_jtag_atlantic*|td_shift[*]}]
+        Info (332166): set_false_path -from [get_registers {*|alt_jtag_atlantic:*|rdata[*]}] -to [get_registers {*|alt_jtag_atlantic*|td_shift[*]}]
+        Info (332166): set_false_path -from [get_registers {*|alt_jtag_atlantic:*|rdata[*]}] -to [get_registers {*|alt_jtag_atlantic*|td_shift[*]}]
+        Info (332166): set_false_path -from [get_registers {*|alt_jtag_atlantic:*|rdata[*]}] -to [get_registers {*|alt_jtag_atlantic*|td_shift[*]}]
+        Info (332166): set_false_path -from [get_registers {*|alt_jtag_atlantic:*|rdata[*]}] -to [get_registers {*|alt_jtag_atlantic*|td_shift[*]}]
+        Info (332166): set_false_path -from [get_registers {*|alt_jtag_atlantic:*|read}] -to [get_registers {*|alt_jtag_atlantic:*|read1*}] 
+        Info (332166): set_false_path -from [get_registers {*|alt_jtag_atlantic:*|read_req}]
+        Info (332166): set_false_path -from [get_registers {*|alt_jtag_atlantic:*|rvalid}] -to [get_registers {*|alt_jtag_atlantic*|td_shift[*]}]
+        Info (332166): set_false_path -from [get_registers {*|t_dav}] -to [get_registers {*|alt_jtag_atlantic:*|tck_t_dav}]
+        Info (332166): set_false_path -from [get_registers {*|alt_jtag_atlantic:*|user_saw_rvalid}] -to [get_registers {*|alt_jtag_atlantic:*|rvalid0*}]
+        Info (332166): set_false_path -from [get_registers {*|alt_jtag_atlantic:*|wdata[*]}] -to [get_registers {*}]
+        Info (332166): set_false_path -from [get_registers {*|alt_jtag_atlantic:*|wdata[*]}] -to [get_registers {*}]
+        Info (332166): set_false_path -from [get_registers {*|alt_jtag_atlantic:*|wdata[*]}] -to [get_registers {*}]
+        Info (332166): set_false_path -from [get_registers {*|alt_jtag_atlantic:*|wdata[*]}] -to [get_registers {*}]
+        Info (332166): set_false_path -from [get_registers {*|alt_jtag_atlantic:*|wdata[*]}] -to [get_registers {*}]
+        Info (332166): set_false_path -from [get_registers {*|alt_jtag_atlantic:*|wdata[*]}] -to [get_registers {*}]
+        Info (332166): set_false_path -from [get_registers {*|alt_jtag_atlantic:*|wdata[*]}] -to [get_registers {*}]
+        Info (332166): set_false_path -from [get_registers {*|alt_jtag_atlantic:*|wdata[*]}] -to [get_registers {*}]
+        Info (332166): set_false_path -from [get_registers {*|alt_jtag_atlantic:*|write}] -to [get_registers {*|alt_jtag_atlantic:*|write1*}] 
+        Info (332166): set_false_path -from [get_registers {*|alt_jtag_atlantic:*|write_stalled}] -to [get_registers {*|alt_jtag_atlantic:*|t_ena*}]
+        Info (332166): set_false_path -from [get_registers {*|alt_jtag_atlantic:*|write_stalled}] -to [get_registers {*|alt_jtag_atlantic:*|t_pause*}]
+        Info (332166): set_false_path -from [get_registers {*|alt_jtag_atlantic:*|write_valid}]
+    Info (332165): Entity sld_hub
+        Info (332166): create_clock -name altera_reserved_tck [get_ports {altera_reserved_tck}] -period 10MHz   
+        Info (332166): set_clock_groups -asynchronous -group {altera_reserved_tck}
+Warning (332174): Ignored filter at check_timing.tcl(13): *|alt_jtag_atlantic:*|jupdate could not be matched with a register File: /home/schady/Projects/rv32i/risc_v_32i/scripts/check_timing.tcl Line: 13
+Warning (332174): Ignored filter at check_timing.tcl(13): *|alt_jtag_atlantic:*|jupdate1* could not be matched with a register File: /home/schady/Projects/rv32i/risc_v_32i/scripts/check_timing.tcl Line: 13
+Warning (332049): Ignored set_false_path at check_timing.tcl(13): Argument <from> is an empty collection File: /home/schady/Projects/rv32i/risc_v_32i/scripts/check_timing.tcl Line: 13
+    Info (332050): read_sdc File: /home/schady/Projects/rv32i/risc_v_32i/scripts/check_timing.tcl Line: 13
+Warning (332049): Ignored set_false_path at check_timing.tcl(13): Argument <to> is an empty collection File: /home/schady/Projects/rv32i/risc_v_32i/scripts/check_timing.tcl Line: 13
+Warning (332174): Ignored filter at check_timing.tcl(13): *|alt_jtag_atlantic:*|t_pause* could not be matched with a register File: /home/schady/Projects/rv32i/risc_v_32i/scripts/check_timing.tcl Line: 13
+Warning (332049): Ignored set_false_path at check_timing.tcl(13): Argument <to> is an empty collection File: /home/schady/Projects/rv32i/risc_v_32i/scripts/check_timing.tcl Line: 13
+    Info (332050): read_sdc File: /home/schady/Projects/rv32i/risc_v_32i/scripts/check_timing.tcl Line: 13
+Info (332104): Reading SDC File: '../../constraints/de10_lite.sdc'
+Info (332151): Clock uncertainty is not calculated until you update the timing netlist.
+Info (332097): The following timing edges are non-unate.  The Timing Analyzer will assume pos-unate behavior for these edges in the clock network.
+    Info (332098): Cell: altera_internal_jtag  from: tck  to: tckutap
+Info (332123): Deriving Clock Uncertainty. Please refer to report_sdc in the Timing Analyzer to see clock uncertainties.
+Info (332097): The following timing edges are non-unate.  The Timing Analyzer will assume pos-unate behavior for these edges in the clock network.
+    Info (332098): Cell: altera_internal_jtag  from: tck  to: tckutap
+Info (332123): Deriving Clock Uncertainty. Please refer to report_sdc in the Timing Analyzer to see clock uncertainties.
+Slow 1200mV 85C Model / setup: 2.339 ns
+Info (332115): Report Timing: Found 10 setup paths (0 violated).  Worst case slack is 2.339
+    Info (332115): -setup
+    Info (332115): -npaths 10
+    Info (332115): -detail full_path
+    Info (332115): -file {/home/schady/Projects/rv32i/risc_v_32i/build/reports/Slow_1200mV_85C_Model_setup.rpt}
+Slow 1200mV 85C Model / hold: 0.249 ns
+Info (332115): Report Timing: Found 10 hold paths (0 violated).  Worst case slack is 0.249
+    Info (332115): -hold
+    Info (332115): -npaths 10
+    Info (332115): -detail full_path
+    Info (332115): -file {/home/schady/Projects/rv32i/risc_v_32i/build/reports/Slow_1200mV_85C_Model_hold.rpt}
+Slow 1200mV 85C Model / recovery: 16.793 ns
+Info (332115): Report Timing: Found 10 recovery paths (0 violated).  Worst case slack is 16.793
+    Info (332115): -recovery
+    Info (332115): -npaths 10
+    Info (332115): -detail full_path
+    Info (332115): -file {/home/schady/Projects/rv32i/risc_v_32i/build/reports/Slow_1200mV_85C_Model_recovery.rpt}
+Slow 1200mV 85C Model / removal: 0.904 ns
+Info (332115): Report Timing: Found 10 removal paths (0 violated).  Worst case slack is 0.904
+    Info (332115): -removal
+    Info (332115): -npaths 10
+    Info (332115): -detail full_path
+    Info (332115): -file {/home/schady/Projects/rv32i/risc_v_32i/build/reports/Slow_1200mV_85C_Model_removal.rpt}
+Info (332097): The following timing edges are non-unate.  The Timing Analyzer will assume pos-unate behavior for these edges in the clock network.
+    Info (332098): Cell: altera_internal_jtag  from: tck  to: tckutap
+Info (332123): Deriving Clock Uncertainty. Please refer to report_sdc in the Timing Analyzer to see clock uncertainties.
+Slow 1200mV 0C Model / setup: 3.762 ns
+Info (332115): Report Timing: Found 10 setup paths (0 violated).  Worst case slack is 3.762
+    Info (332115): -setup
+    Info (332115): -npaths 10
+    Info (332115): -detail full_path
+    Info (332115): -file {/home/schady/Projects/rv32i/risc_v_32i/build/reports/Slow_1200mV_0C_Model_setup.rpt}
+Slow 1200mV 0C Model / hold: 0.251 ns
+Info (332115): Report Timing: Found 10 hold paths (0 violated).  Worst case slack is 0.251
+    Info (332115): -hold
+    Info (332115): -npaths 10
+    Info (332115): -detail full_path
+    Info (332115): -file {/home/schady/Projects/rv32i/risc_v_32i/build/reports/Slow_1200mV_0C_Model_hold.rpt}
+Slow 1200mV 0C Model / recovery: 17.024 ns
+Info (332115): Report Timing: Found 10 recovery paths (0 violated).  Worst case slack is 17.024
+    Info (332115): -recovery
+    Info (332115): -npaths 10
+    Info (332115): -detail full_path
+    Info (332115): -file {/home/schady/Projects/rv32i/risc_v_32i/build/reports/Slow_1200mV_0C_Model_recovery.rpt}
+Slow 1200mV 0C Model / removal: 0.828 ns
+Info (332115): Report Timing: Found 10 removal paths (0 violated).  Worst case slack is 0.828
+    Info (332115): -removal
+    Info (332115): -npaths 10
+    Info (332115): -detail full_path
+    Info (332115): -file {/home/schady/Projects/rv32i/risc_v_32i/build/reports/Slow_1200mV_0C_Model_removal.rpt}
+Info (332097): The following timing edges are non-unate.  The Timing Analyzer will assume pos-unate behavior for these edges in the clock network.
+    Info (332098): Cell: altera_internal_jtag  from: tck  to: tckutap
+Info (332123): Deriving Clock Uncertainty. Please refer to report_sdc in the Timing Analyzer to see clock uncertainties.
+Fast 1200mV 0C Model / setup: 12.165 ns
+Info (332115): Report Timing: Found 10 setup paths (0 violated).  Worst case slack is 12.165
+    Info (332115): -setup
+    Info (332115): -npaths 10
+    Info (332115): -detail full_path
+    Info (332115): -file {/home/schady/Projects/rv32i/risc_v_32i/build/reports/Fast_1200mV_0C_Model_setup.rpt}
+Fast 1200mV 0C Model / hold: 0.096 ns
+Info (332115): Report Timing: Found 10 hold paths (0 violated).  Worst case slack is 0.096
+    Info (332115): -hold
+    Info (332115): -npaths 10
+    Info (332115): -detail full_path
+    Info (332115): -file {/home/schady/Projects/rv32i/risc_v_32i/build/reports/Fast_1200mV_0C_Model_hold.rpt}
+Fast 1200mV 0C Model / recovery: 18.421 ns
+Info (332115): Report Timing: Found 10 recovery paths (0 violated).  Worst case slack is 18.421
+    Info (332115): -recovery
+    Info (332115): -npaths 10
+    Info (332115): -detail full_path
+    Info (332115): -file {/home/schady/Projects/rv32i/risc_v_32i/build/reports/Fast_1200mV_0C_Model_recovery.rpt}
+Fast 1200mV 0C Model / removal: 0.403 ns
+Info (332115): Report Timing: Found 10 removal paths (0 violated).  Worst case slack is 0.403
+    Info (332115): -removal
+    Info (332115): -npaths 10
+    Info (332115): -detail full_path
+    Info (332115): -file {/home/schady/Projects/rv32i/risc_v_32i/build/reports/Fast_1200mV_0C_Model_removal.rpt}
+Info (332101): Design is fully constrained for setup requirements
+Info (332101): Design is fully constrained for hold requirements
+Info (332114): Report Metastability: Found 1 synchronizer chains.
+    Info (332114): Worst-Case MTBF of Design is 1e+09 years or 3.15e+16 seconds.
+    Info (332114): Typical MTBF of Design is 1e+09 years or 3.15e+16 seconds.
+
+    Info (332114): Number of Synchronizer Chains Found: 1
+    Info (332114): Shortest Synchronizer Chain: 2 Registers
+    Info (332114): Fraction of Chains for which MTBFs Could Not be Calculated: 0.000
+    Info (332114): Worst Case Available Settling Time: 36.212 ns
+    Info (332114): Worst-Case MTBF values are calculated based on the worst-case silicon characteristics, with worst-case operating conditions.
+    Info (332114):   - Under worst-case conditions, an increase of 100ps in available settling time will increase MTBF values by a factor of 1.8
+    Info (332114): Typical MTBF values are calculated based on the nominal silicon characteristics, at nominal operating conditions.
+    Info (332114):   - Under typical conditions, an increase of 100ps in available settling time will increase MTBF values by a factor of 3.7
+Timing checks passed; reports: /home/schady/Projects/rv32i/risc_v_32i/build/reports
+Info (23030): Evaluation of Tcl script scripts/check_timing.tcl was successful
+Info: Quartus Prime Timing Analyzer was successful. 0 errors, 6 warnings
+    Info: Peak virtual memory: 461 megabytes
+    Info: Processing ended: Thu Oct 29 21:38:41 2026
+    Info: Elapsed time: 00:00:03
+    Info: Total CPU time (on all processors): 00:00:03

@@ -13,7 +13,7 @@ help:
 	@echo "make timing    Recheck timing for an existing compilation"
 	@echo "make program   Configure the board with the existing .sof"
 	@echo "make image     Build the ROM loader and regenerate its VHDL image"
-	@echo "make app       Build the uploadable hello assembly example"
+	@echo "make app       Build the uploadable hello and mixed-RAM examples"
 
 test:
 	$(PYTHON) scripts/simulate.py
@@ -38,6 +38,7 @@ image: software
 
 app:
 	$(PYTHON) scripts/build_app.py software/hello.S --test-image sim/images/hello.hex
+	$(PYTHON) scripts/build_app.py software/mixed_ram.S --test-image sim/images/mixed_ram.hex
 
 # Analyze benches first. Uses LLVM, or GNU tools when RISCV_PREFIX is exported.
 test-adapter: test

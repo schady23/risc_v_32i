@@ -1,0 +1,15 @@
+Operating conditions: Slow 1200mV 85C Model
+  setup worst slack: 2.339 ns
+  hold worst slack: 0.249 ns
+  recovery worst slack: 16.793 ns
+  removal worst slack: 0.904 ns
+Operating conditions: Slow 1200mV 0C Model
+  setup worst slack: 3.762 ns
+  hold worst slack: 0.251 ns
+  recovery worst slack: 17.024 ns
+  removal worst slack: 0.828 ns
+Operating conditions: Fast 1200mV 0C Model
+  setup worst slack: 12.165 ns
+  hold worst slack: 0.096 ns
+  recovery worst slack: 18.421 ns
+  removal worst slack: 0.403 ns

@@ -3,3 +3,5 @@
 *.docx binary
 *.ghw binary
 *.png binary
+*.jpg binary
+*.JPG binary

@@ -7,7 +7,13 @@ use std.env.all;
 use work.rv32i_pkg.all;
 use work.jtag_uart_sim_pkg.all;
 
-entity tb_de10_lite_top is end entity;
+entity tb_de10_lite_top is
+  generic (
+    IMAGE_FILE : string := "sim/images/hello.hex";
+    APP_MESSAGE : string := "Hello from uploaded RV32I assembly!";
+    APP_EXIT : string := "0000002A"
+  );
+end entity;
 architecture test of tb_de10_lite_top is
   signal clk : std_logic := '0';
   signal keys : std_logic_vector(1 downto 0) := "10";
@@ -19,7 +25,7 @@ begin
     type words_t is array (0 to 3071) of word_t;
     variable image : words_t;
     variable count : natural := 0;
-    file file_image : text open read_mode is "sim/images/hello.hex";
+    file file_image : text open read_mode is IMAGE_FILE;
     variable line_value : line;
     variable crc : unsigned(31 downto 0) := (others => '1');
     procedure send_byte(constant value : natural) is
@@ -90,22 +96,23 @@ begin
     load_image;
     for run_index in 1 to 2 loop
       send_byte(character'pos('G'));
-      expect_text("RUN" & CRLF & "Hello from uploaded RV32I assembly!" & CRLF &
-                  "EXIT 0000002A" & CRLF & "ready> ");
+      expect_text("RUN" & CRLF & APP_MESSAGE & CRLF &
+                  "EXIT " & APP_EXIT & CRLF & "ready> ");
     end loop;
     load_image(true);
     send_byte(character'pos('G')); expect_text("ERR no image" & CRLF & "ready> ");
     load_image;
     send_byte(character'pos('G'));
-    expect_text("RUN" & CRLF & "Hello from uploaded RV32I assembly!" & CRLF &
-                "EXIT 0000002A" & CRLF & "ready> ");
+    expect_text("RUN" & CRLF & APP_MESSAGE & CRLF &
+                "EXIT " & APP_EXIT & CRLF & "ready> ");
     -- Interrupt a new upload; reset clears loader authorization and IP FIFOs.
     send_byte(character'pos('L')); send_u32(to_unsigned(count*4, 32)); send_u32(crc);
     expect_text("SEND" & CRLF); send_byte(16#FF#);
     keys(0) <= '0'; wait for 100 ns; keys(0) <= '1';
     expect_text("RV32I JTAG loader v1" & CRLF & "ready> ");
     send_byte(character'pos('G')); expect_text("ERR no image" & CRLF & "ready> ");
-    report "tb_de10_lite_top passed: upload/CRC, RAM execution, data/BSS, return/re-run, reset" severity note;
+    report "tb_de10_lite_top passed: " & IMAGE_FILE &
+           ", upload/CRC, RAM execution, return/re-run, reset" severity note;
     stop; wait;
   end process;
   process begin wait for 30 ms; assert false report "JTAG loader timeout" severity failure; end process;
